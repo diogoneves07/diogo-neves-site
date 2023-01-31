@@ -2,6 +2,7 @@ import { css } from "./Header";
 
 css`
   color: #ededed;
+  padding: 5px 0;
 
   header > div {
     display: flex;
@@ -41,7 +42,7 @@ css`
     --height: 35px;
     clip-path: polygon(0% -100%, 20% 100%, 100% 0%);
     position: relative;
-    bottom: 0px;
+    bottom: -5px;
     background: rgb(89, 25, 81);
     background: linear-gradient(
       90deg,
