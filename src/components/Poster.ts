@@ -3,22 +3,18 @@ import { _ } from "bemtv";
 const { css, template } = _`Poster`();
 
 css`
-  height: 300px;
   width: 100%;
 
   .card-content {
-    width: 100%;
-    height: 100%;
     background: rgb(89, 25, 81);
     background: linear-gradient(
       190deg,
       rgba(89, 25, 81, 0.6) 78%,
       rgba(2, 10, 88, 0.6) 76%
     );
+    text-align: center;
 
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
+    overflow: hidden;
   }
   .card {
     height: 250px;
@@ -38,8 +34,9 @@ css`
     box-sizing: border-box;
     display: flex;
     align-items: center;
+    justify-content: center;
     float: left;
-    font-size: 22px;
+    font-size: 20px;
     word-wrap: break-word;
     overflow: hidden;
     padding: 0 10%;

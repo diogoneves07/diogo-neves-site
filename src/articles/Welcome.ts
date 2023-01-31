@@ -22,7 +22,7 @@ article[
         h3[Em cartaz: ]
 
         blockquote[
-            Neste momento esta secção não tem todos os meus artigos e nem todos os meus projetos, em breve estarão disponíveis, até lá você acessar os meus artigos em: 
+            Neste momento esta secção não tem todos os meus artigos e nem todos os meus projetos, em breve estarão disponíveis, até lá você pode acessar os meus artigos em: 
             
             a[ href = "https://dev.to/diogoneves07" ~ dev.to - diogoneves07] e os meus projetos em:
             a[ href = "https://github.com/diogoneves07" ~ Github - diogoneves07].

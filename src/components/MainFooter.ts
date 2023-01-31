@@ -15,4 +15,4 @@ css`
   text-align: center;
   color: #ededed;
 `;
-template`footer[© 2022 Diogo Neves.]`;
+template`footer[© 2022 Diogo Neves | 07dneves(@)gmail.com]`;

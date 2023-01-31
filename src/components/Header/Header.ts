@@ -12,17 +12,11 @@ template`
 div[ 
     header[
       div[
-        blockquote[
-          p[
-            “Meus projetos, reflexões e artigos profundos, atualmente focados em desenvolvimento web.”
-            
-          ]
-        ]
         div[
           strong[ ${devMessageEl} Devs.has(“diogoneves07”) ]
         ] 
       ]
     ]
 
-    div[class="strange-shape" ~]
+    div[class="strange-shape" ~ ]
 ]`;

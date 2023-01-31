@@ -3,15 +3,11 @@ import { css } from "./Header";
 css`
   color: #ededed;
 
-  header {
-    padding: 10vh 0;
-  }
   header > div {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100%;
-    padding-left: 20px;
   }
 
   header > div > div {
@@ -25,7 +21,7 @@ css`
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 15px;
+    padding: 15px 0;
   }
   header > div > div > strong {
     font-size: 20px;
@@ -34,35 +30,18 @@ css`
 
   @keyframes anime-blockquote {
     0% {
-      right: -300px;
+      clip-path: polygon(0% -100%, 50% 100%, 100% 0%);
     }
     100% {
-      right: -0px;
+      clip-path: polygon(0% -100%, 20% 100%, 100% 0%);
     }
-  }
-
-  header > div > blockquote {
-    margin: 0;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: rgb(15, 0, 13);
-    background: linear-gradient(
-      -190deg,
-      rgba(21, 0, 19, 1) 50%,
-      rgba(0, 2, 22, 1) 50%
-    );
-    position: relative;
-    animation: anime-blockquote cubic-bezier(0.68, -0.55, 0.265, 1.55) 1.5s
-      forwards;
   }
 
   .strange-shape {
-    --height: 25px;
-    clip-path: polygon(50% -100%, 20% 100%, 100% 100%);
+    --height: 35px;
+    clip-path: polygon(0% -100%, 20% 100%, 100% 0%);
     position: relative;
-    bottom: var(--height);
+    bottom: 0px;
     background: rgb(89, 25, 81);
     background: linear-gradient(
       90deg,
@@ -71,5 +50,8 @@ css`
     );
     height: var(--height);
     width: 100%;
+    animation: anime-blockquote cubic-bezier(0.68, -0.55, 0.265, 1.55) 1.5s
+      forwards;
   }
 `;
+1;
