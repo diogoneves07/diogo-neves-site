@@ -1,6 +1,10 @@
 import { stateFn } from "bemtv";
 
-const [$theme, setTheme] = stateFn("dark", true);
+const initTheme =
+  window.matchMedia &&
+  !window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+const [$theme, setTheme] = stateFn(initTheme ? "light" : "dark", true);
 
 export const isThemeDark = () => $theme() === "dark";
 
