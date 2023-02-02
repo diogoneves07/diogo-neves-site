@@ -25,14 +25,15 @@ click$(() => {
 css`
   position: fixed;
   right: 2%;
-  bottom: 5%;
-  padding: 10px;
-  width: 100px;
+  bottom: 3%;
+  padding: 5px;
+  width: 90px;
   color: #d4d4d4;
-  font-size: 18px;
+  font-size: 16px;
   border-radius: 10px 0px 10px;
   border: 0px;
-  background-color: rgba(3, 6, 40, 1);
+  height: 40px;
+  background-color: rgba(28, 1, 25, 1);
   border: solid blue;
   border-width: 0px 1px 0px 1px;
 `;

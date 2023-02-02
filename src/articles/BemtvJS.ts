@@ -11,11 +11,12 @@ article[
     h1[BemtvJS]
     
     p[
-        Bemtv é o meu maior e mais recente projeto até agora, você pode acessar o repositório do projeto através deste link:
-        
-        a[href="https://github.com/diogoneves07/bemtvjs"  ~ https://github.com/diogoneves07/bemtvjs], espero que goste!
-
+        A BemtvJS é o meu projeto mais importante e recente. Foi um trabalho de longos meses e, sem dúvida, um projeto de altíssima dificuldade. Durante a construção da biblioteca, tive que tomar decisões de design para tornar a API do Bemtv fácil de usar. 
     ]
+
+    p[Durante o processo de desenvolvimento, precisei criar: um algoritmo de reconciliação, um roteador SPA, uma linguagem de marcação própria (semelhante ao HTML), uma forma de usar CSS-IN-JS de forma integrada para lidar com eventos DOM, e criar a documentação da API em português e inglês. Posso continuar listando várias outras coisas porque, sem dúvida, foi meu projeto mais desafiador e estou muito feliz com o resultado atual.]
+
+    p[Acesse a Bemtv JS: a[href="https://github.com/diogoneves07/bemtvjs"  ~ https://github.com/diogoneves07/bemtvjs]]
 
     footer[
         p[

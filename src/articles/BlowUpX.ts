@@ -11,11 +11,12 @@ article[
     h1[BlowUpX | O meu jogo]
     
     p[
-        Este foi o primeiro jogo que desenvolvi e foi muito especial porque usei minha própria biblioteca de animação  a
 
-        a[href="https://github.com/diogoneves07/wide-smile"  ~ wide-smile]
+        BlowUpX foi o meu primeiro jogo e, durante sua construção, eu utilizei minha própria biblioteca de animações(a[href="https://github.com/diogoneves07/wide-smile"  ~ wide-smile]), tornando-o especial. Ao longo do processo de desenvolvimento, eu aprendi a montar regras para a dinâmica do jogo, trabalhar com animações após eventos específicos do usuário, e lidar com a responsividade para tornar o jogo jogável em qualquer dispositivo. Esse projeto também exigiu que eu mostrasse minha criatividade, pois queria fazer algo simples, mas inovador. Fiquei feliz com o resultado.
+    ]
 
-        para desenvolvê-lo, você pode jogá-lo neste link: a[href="https://blow-up-x.vercel.app/" ~ https://blow-up-x.vercel.app/], espero que goste!
+    p[
+        Você pode jogá-lo neste link: a[href="https://blow-up-x.vercel.app/" ~ https://blow-up-x.vercel.app/], espero que goste!
     ]
 
     footer[

@@ -7,8 +7,7 @@ article[
     h1[Diogo Neves]
     
     p[
-        Declaro-me apaixonado por tecnologia, sempre movido pela curiosidade, busco conhecimento sobre diversos assuntos. Tenho experiências práticas com diversas ferramentas: HTML, CSS, JavaScript, TypeScript, Express.js, Graphql, Axios, React, Angular, Vite, Jest, Python, Node.js, GIT, CI, Regex e outras.
-        
+        Me autodeclaro apaixonado por tecnologia, sempre movido pela curiosidade, busco conhecimento sobre diversos assuntos. Tenho experiências práticas com várias ferramentas: HTML, CSS, JavaScript, TypeScript, Express.js, Graphql, Axios, React, Angular, Vite, Jest, Python, Node.js, GIT, CI, Regex e outras. 
     ]
     p[
         Notavelmente, sou proficiente em JavaScript/TypeScript, a linguagem que usei para desenvolver 4 bibliotecas, a mais recente uma biblioteca de interface de usuário (UI) semelhante a React chamada Bemtv (que está por trás deste site). 

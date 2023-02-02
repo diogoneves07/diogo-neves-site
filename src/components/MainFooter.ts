@@ -14,5 +14,6 @@ css`
   padding: 15px 0;
   text-align: center;
   color: #ededed;
+  padding-bottom: 100px;
 `;
 template`footer[© 2022 Diogo Neves | 07dneves(@)gmail.com]`;
