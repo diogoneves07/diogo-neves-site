@@ -30,7 +30,7 @@ css`
   }
 `;
 
-template`button[ title="Voltar para a página anterior..." ~ 🢘]`;
+template`button[ title="Voltar para a página anterior..." ~ &#129176;]`;
 
 render();
 
