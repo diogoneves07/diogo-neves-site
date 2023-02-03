@@ -8,11 +8,14 @@ route({
 
 template`
 article[
-    h1[BlowUpX | O meu jogo]
+    h1[BlowUpX]
     
     p[
 
-        BlowUpX foi o meu primeiro jogo e, durante sua construção, eu utilizei minha própria biblioteca de animações(a[href="https://github.com/diogoneves07/wide-smile"  ~ wide-smile]), tornando-o especial. Ao longo do processo de desenvolvimento, eu aprendi a montar regras para a dinâmica do jogo, trabalhar com animações após eventos específicos do usuário, e lidar com a responsividade para tornar o jogo jogável em qualquer dispositivo. Esse projeto também exigiu que eu mostrasse minha criatividade, pois queria fazer algo simples, mas inovador. Fiquei feliz com o resultado.
+        BlowUpX foi o meu primeiro jogo e, durante sua construção, eu utilizei minha própria biblioteca de animações(a[href="https://github.com/diogoneves07/wide-smile"  ~ wide-smile]), tornando-o especial. 
+    ]
+    p[
+        Ao longo do processo de desenvolvimento, eu aprendi a montar regras para a dinâmica do jogo, trabalhar com animações após eventos específicos do usuário, e lidar com a responsividade para tornar o jogo jogável em qualquer dispositivo. Esse projeto também exigiu que eu mostrasse minha criatividade, pois queria fazer algo simples, mas inovador. Fiquei feliz com o resultado.
     ]
 
     p[
