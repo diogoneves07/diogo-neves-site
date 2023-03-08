@@ -32,6 +32,6 @@ css`
 
 template`  
 
-div[ ${LoadingBarProxy}[] Header[] Main[] MainFooter[] ThemeButton[] ]`;
+div[ ${LoadingBarProxy}[] Header[] Main[] MainFooter[] PreviousRouteButton[] ThemeButton[] ]`;
 
 render();

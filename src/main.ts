@@ -1,4 +1,5 @@
-import "./router-control";
+/*import "./router-control";
 import "./lazy-components";
 import "./components/i";
-import "./style.css";
+import "./style.css";*/
+import "./dom-blanket";
