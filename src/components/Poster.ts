@@ -1,6 +1,7 @@
 import { _ } from "bemtv";
+import Atropos from "atropos";
 
-const { css, template } = _`Poster`();
+const { onMount, css, template } = _`Poster`();
 
 css`
   width: 100%;
@@ -46,8 +47,23 @@ css`
   }
 `;
 
+onMount(() => {
+  const myAtropos = Atropos({
+    el: ".my-atropos",
+    activeOffset: 20,
+    shadowScale: 0,
+  });
+
+  console.log(myAtropos);
+});
+
 template`
-    div[
+
+<div class="atropos my-atropos">
+  <div class="atropos-scale">
+    <div class="atropos-rotate">
+      <div class="atropos-inner">
+      div[
         div[ 
             class="card-content" 
             ~ 
@@ -77,4 +93,10 @@ template`
             ]
             
         ]
-    ]`;
+    ]
+      </div>
+    </div>
+  </div>
+</div>
+
+    `;

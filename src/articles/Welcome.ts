@@ -7,11 +7,18 @@ article[
     h1[Diogo Neves]
     
     p[
-        Sou um desenvolvedor com foco em Frontend, mas também tenho habilidades em Backend. Com anos de prática e dedicação, aprendi a dedicar horas, dias e até meses para resolver problemas complexos e aprimorar minhas habilidades.
+        Desenvolvedor Front-End com conhecimentos em Back-End. Habilidades para
+        interação eficaz em reuniões com clientes e experiência em todas as fases de
+        projetos, garantindo soluções de alta qualidade
 
     ]
     p[
-        Possuo  experiência em diversas ferramentas e tecnologias, incluindo, mas não limitado a: Javascript, Typescript, C#, HTML, CSS, React, Angular, VueJS, Vite, NodeJS, Python, Regex, GraphQl, Jest, Git, e CI/CD. Além disso, tenho conhecimentos sólidos em arquiteturas e práticas recomendadas para desenvolvimento de software.
+        Possuo experiência em diversas ferramentas e tecnologias, incluindo, mas não
+        limitado a: Javascript, Typescript, HTML, CSS, React, Angular, Vue, Vite,
+        NodeJS, Python, Regex, GraphQl, Jest, Git, e CI/CD. Além disso, tenho
+        conhecimentos sólidos em arquiteturas e práticas recomendadas para
+        desenvolvimento de software.
+
     ]
     p[
         Notavelmente, sou proficiente em JavaScript/TypeScript, a linguagem que usei para desenvolver 4 bibliotecas, a mais recente uma biblioteca de interface de usuário (UI) semelhante a React chamada Bemtv (que está por trás deste site). 
@@ -37,7 +44,7 @@ article[
         p[
             Última atualização
 
-            time[ datetime="2022-12-27 22:24" ~ 2022/12/27]
+            time[ datetime="2024-03-23 12:36" ~ 2024/03/23]
 
         ]
     ]
