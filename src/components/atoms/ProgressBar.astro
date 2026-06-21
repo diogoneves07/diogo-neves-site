@@ -1,0 +1,50 @@
+---
+// Top-of-viewport navigation progress bar, driven by the View Transitions
+// lifecycle: grows while the next page is being prepared, completes on swap.
+---
+
+<div id="progress-bar" aria-hidden="true" transition:persist></div>
+
+<style>
+  #progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0;
+    opacity: 0;
+    background: linear-gradient(90deg, var(--brand-magenta) 28%, blue 76%);
+    z-index: 999;
+    transition: width 0.7s ease-in-out;
+  }
+</style>
+
+<script>
+  const HIDE_DELAY_MS = 500;
+
+  function bar(): HTMLElement | null {
+    return document.getElementById("progress-bar");
+  }
+
+  function start(): void {
+    const el = bar();
+    if (!el) return;
+    el.style.transition = "width 0.7s ease-in-out";
+    el.style.opacity = "1";
+    el.style.width = "75%";
+  }
+
+  function finish(): void {
+    const el = bar();
+    if (!el) return;
+    el.style.width = "100%";
+    el.style.transition = "opacity 0.5s ease-in-out";
+    el.style.opacity = "0";
+    window.setTimeout(() => {
+      el.style.cssText = "";
+    }, HIDE_DELAY_MS);
+  }
+
+  document.addEventListener("astro:before-preparation", start);
+  document.addEventListener("astro:after-swap", finish);
+</script>

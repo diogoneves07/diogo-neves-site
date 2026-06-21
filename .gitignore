@@ -14,6 +14,17 @@ dist
 dist-ssr
 *.local
 
+# Astro / Vercel
+.astro
+.vercel
+.output
+
+# Test artifacts
+test-results
+playwright-report
+playwright/.cache
+coverage
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
