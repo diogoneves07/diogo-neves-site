@@ -70,6 +70,7 @@ npm run dev | build | preview
 | ------------------------------------- | ------------------------------------ |
 | Pipeline details / stage contracts    | `docs/engineering-pipeline.md`       |
 | Code rules, forbidden patterns, DoD   | `docs/engineering-standards.md`      |
+| Any component / UI / Atomic Design    | `docs/component-architecture.md`     |
 | Feature / fix / refactor (workflow)   | `docs/github-workflow.md`            |
 
 ## Document Decision System

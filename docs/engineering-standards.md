@@ -23,9 +23,9 @@ specific rule — do not load proactively.
 
 ## Structure
 
-- `src/components/` for UI components.
+- `src/components/` for UI components — organized by Atomic Design layer (atoms / molecules / organisms / templates / pages). See [`docs/component-architecture.md`](component-architecture.md).
 - `src/articles/` for article content.
-- `src/state-fns/` for state logic.
+- `src/state-fns/` for shared reactive state.
 - Prefer small focused modules over large files that mix concerns.
 
 ## Formatting
@@ -43,6 +43,9 @@ These are never acceptable:
 - Shared mutable state mutated across unrelated modules
 - Duplicating equivalent logic in multiple places instead of extracting a shared function
 - Hardcoded magic strings or numbers without a named constant
+- Inline `style=""` attributes — always use scoped `css\`\`` inside the component
+- Placing a component in the wrong Atomic Design layer (see `docs/component-architecture.md`)
+- Using `proxy()` to communicate between sibling organisms — use `state-fns/` instead
 
 ## AI Anti-patterns
 
