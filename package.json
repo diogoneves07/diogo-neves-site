@@ -7,7 +7,10 @@
     "dev": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -15,5 +18,10 @@
     "@astrojs/vercel": "^8.0.0",
     "astro": "^5.0.0",
     "typescript": "^5.7.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "@types/node": "^22.10.0",
+    "vitest": "^3.0.0"
   }
 }

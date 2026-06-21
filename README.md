@@ -11,7 +11,11 @@ npm install
 npm run dev      # start the dev server
 npm run build    # type-check (astro check) + production build
 npm run preview  # preview the production build locally
+npm run test     # unit tests (Vitest + Astro Container API)
+npm run test:e2e # end-to-end tests (Playwright)
 ```
+
+> Playwright needs its browser once: `npx playwright install chromium`.
 
 ## Structure
 

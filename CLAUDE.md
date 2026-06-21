@@ -54,12 +54,14 @@ Projeto pessoal em reconstrução total. Sem usuários reais, sem dados em produ
 
 **Why** — Site pessoal de portfólio de Diogo Neves.
 
-**What** — SPA com Vite + TypeScript + Bemtv (framework reativo próprio).
+**What** — Site estático com Astro + TypeScript + MDX (artigos via Content Collections). Deploy na Vercel.
 
-**How** — Sem build tool além do Vite. Sem testes automatizados atualmente.
+**How** — Astro (Vite por baixo). Testes: Vitest (unitários, Container API) + Playwright (e2e).
 
 ```
 npm run dev | build | preview
+npm run test        # unitários (Vitest)
+npm run test:e2e    # e2e (Playwright)
 ```
 
 ---
