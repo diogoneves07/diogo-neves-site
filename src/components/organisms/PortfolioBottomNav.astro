@@ -1,0 +1,293 @@
+---
+interface NavItem {
+  href: string;
+  label: string;
+  icon: "user" | "briefcase" | "chip" | "pen" | "mail";
+}
+
+interface Props {
+  leftItems: NavItem[];
+  centerItem: NavItem;
+  rightItems: NavItem[];
+}
+
+const { leftItems, centerItem, rightItems } = Astro.props;
+
+const iconMarkup: Record<NavItem["icon"], string> = {
+  user: `
+    <path d="M12 12.2a4.1 4.1 0 1 0-4.1-4.1 4.1 4.1 0 0 0 4.1 4.1Z"></path>
+    <path d="M4.5 19.2a7.5 7.5 0 0 1 15 0"></path>
+  `,
+  briefcase: `
+    <path d="M8.5 7.5V6.3A1.8 1.8 0 0 1 10.3 4.5h3.4a1.8 1.8 0 0 1 1.8 1.8v1.2"></path>
+    <path d="M4.7 8.3h14.6A1.7 1.7 0 0 1 21 10v7.5a1.9 1.9 0 0 1-1.9 1.9H4.9A1.9 1.9 0 0 1 3 17.5V10a1.7 1.7 0 0 1 1.7-1.7Z"></path>
+    <path d="M3 12.3a25 25 0 0 0 18 0"></path>
+  `,
+  chip: `
+    <rect x="6.5" y="6.5" width="11" height="11" rx="2"></rect>
+    <path d="M9.5 3v2.5M14.5 3v2.5M9.5 18.5V21M14.5 18.5V21M3 9.5h2.5M3 14.5h2.5M18.5 9.5H21M18.5 14.5H21"></path>
+  `,
+  pen: `
+    <path d="m4.5 19.5 4-.8 8.8-8.8a1.8 1.8 0 0 0 0-2.6l-.6-.6a1.8 1.8 0 0 0-2.6 0l-8.8 8.8Z"></path>
+    <path d="m12.8 7.2 4 4"></path>
+  `,
+  mail: `
+    <path d="M4 7.5h16v9A1.5 1.5 0 0 1 18.5 18h-13A1.5 1.5 0 0 1 4 16.5Z"></path>
+    <path d="m4.5 8 7.5 5 7.5-5"></path>
+  `,
+};
+
+// Cor própria por ícone — destaca o menu antes monocromático e torna o FAB inconfundível.
+const iconColor: Record<NavItem["icon"], string> = {
+  user: "#2563eb",
+  briefcase: "#d97706",
+  chip: "#0891b2",
+  pen: "#7c3aed",
+  mail: "#059669",
+};
+---
+
+<nav class="portfolio-bottom-nav" aria-label="Navegação inferior do portfólio">
+  <div class="bottom-nav-shell">
+    <a
+      href={centerItem.href}
+      class="bottom-nav-center"
+      style={`--icon-color:${iconColor[centerItem.icon]}`}
+      aria-label={centerItem.label}
+      data-nav-link
+      data-bottom-nav-link
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <g set:html={iconMarkup[centerItem.icon]} />
+      </svg>
+      <span>{centerItem.label}</span>
+    </a>
+
+    <div class="bottom-nav-bar" aria-hidden="true">
+      <svg viewBox="0 0 360 86" preserveAspectRatio="none">
+        <path d="M0 0H116C124 0 128 10 133 17C142 32 154 32 180 32C206 32 218 32 227 17C232 10 236 0 244 0H360V86H0V0Z"></path>
+      </svg>
+    </div>
+
+    <div class="bottom-nav-actions">
+      <div class="bottom-nav-group">
+        {leftItems.map((item) => (
+          <a href={item.href} style={`--icon-color:${iconColor[item.icon]}`} aria-label={item.label} data-nav-link data-bottom-nav-link>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <g set:html={iconMarkup[item.icon]} />
+            </svg>
+            <span>{item.label}</span>
+          </a>
+        ))}
+      </div>
+
+      <div class="bottom-nav-gap" aria-hidden="true"></div>
+
+      <div class="bottom-nav-group">
+        {rightItems.map((item) => (
+          <a href={item.href} style={`--icon-color:${iconColor[item.icon]}`} aria-label={item.label} data-nav-link data-bottom-nav-link>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <g set:html={iconMarkup[item.icon]} />
+            </svg>
+            <span>{item.label}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</nav>
+
+<style>
+  .portfolio-bottom-nav {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 12;
+    display: block;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .bottom-nav-shell {
+    position: relative;
+    height: var(--mobile-bottom-nav-height);
+    width: 100%;
+  }
+
+  .bottom-nav-bar {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    color: rgba(248, 244, 235, 0.82);
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+    filter: drop-shadow(0 14px 24px rgba(0, 0, 0, 0.24));
+  }
+
+  .bottom-nav-bar svg {
+    display: block;
+    width: 100%;
+    height: 5.375rem;
+  }
+
+  .bottom-nav-bar path {
+    fill: currentColor;
+  }
+
+  .bottom-nav-actions {
+    position: absolute;
+    inset-inline: 0;
+    bottom: var(--space-2);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    padding-inline: var(--space-3);
+  }
+
+  .bottom-nav-group {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: var(--space-1);
+  }
+
+  .bottom-nav-gap {
+    width: 5.875rem;
+    flex: 0 0 auto;
+  }
+
+  .bottom-nav-group a,
+  .bottom-nav-center {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    color: var(--fg-muted);
+    text-align: center;
+    transition:
+      color 0.15s ease-in-out,
+      transform 0.15s ease-in-out;
+  }
+
+  .bottom-nav-group a {
+    min-height: 3.875rem;
+    padding: var(--space-2) var(--space-1);
+    border-radius: 1rem;
+  }
+
+  .bottom-nav-group a:hover,
+  .bottom-nav-center:hover {
+    color: var(--fg-bright);
+  }
+
+  .bottom-nav-group a[data-active="true"],
+  .bottom-nav-center[data-active="true"] {
+    color: var(--accent);
+  }
+
+  .bottom-nav-group span,
+  .bottom-nav-center span {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    font: var(--typography-caption);
+    font-weight: 600;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .bottom-nav-group svg,
+  .bottom-nav-center svg {
+    width: 2rem;
+    height: 2rem;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+  }
+
+  .bottom-nav-group svg {
+    stroke: var(--icon-color, currentColor);
+  }
+
+  .bottom-nav-center {
+    position: absolute;
+    top: -0.35rem;
+    left: 50%;
+    z-index: 2;
+    width: 3.8125rem;
+    height: 3.8125rem;
+    flex: none;
+    transform: translateX(-50%);
+    border: 3px solid rgba(248, 244, 235, 0.98);
+    border-radius: 50%;
+    background: var(--icon-color);
+    box-shadow: 0 12px 22px rgba(8, 8, 18, 0.28);
+    color: #fff;
+  }
+
+  .bottom-nav-center svg {
+    width: 2.2rem;
+    height: 2.2rem;
+    stroke: currentColor;
+  }
+
+  .bottom-nav-center:active,
+  .bottom-nav-group a:active {
+    transform: translateY(1px);
+  }
+
+  .bottom-nav-center:active {
+    transform: translateX(-50%) translateY(1px);
+  }
+
+  .bottom-nav-center span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (min-width: 721px) {
+    .bottom-nav-shell {
+      height: 8rem;
+    }
+
+    .bottom-nav-group a {
+      min-height: 4.25rem;
+      padding-inline: var(--space-3);
+    }
+
+    .bottom-nav-group span {
+      font-size: var(--text-sm);
+    }
+
+    .bottom-nav-group svg {
+      width: 2.2rem;
+      height: 2.2rem;
+    }
+
+    .bottom-nav-center {
+      width: 4.25rem;
+      height: 4.25rem;
+      top: -0.5rem;
+    }
+
+    .bottom-nav-center svg {
+      width: 2.4rem;
+      height: 2.4rem;
+    }
+  }
+</style>

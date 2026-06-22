@@ -1,0 +1,76 @@
+---
+import { techIcon } from "../../data/tech-icons";
+
+interface Props {
+  items: string[];
+}
+
+const { items } = Astro.props;
+---
+
+<ul class="chip-list">
+  {
+    items.map((item) => {
+      const icon = techIcon(item);
+      return (
+        <li>
+          {icon.kind === "svg" ? (
+            <img
+              class="chip-icon"
+              src={icon.src}
+              alt=""
+              aria-hidden="true"
+              width="16"
+              height="16"
+              loading="lazy"
+            />
+          ) : (
+            <span class="chip-icon chip-icon-emoji" aria-hidden="true">
+              {icon.char}
+            </span>
+          )}
+          {item}
+        </li>
+      );
+    })
+  }
+</ul>
+
+<style>
+  .chip-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: 0;
+    margin: var(--space-1) 0 0;
+  }
+
+  .chip-list li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4375rem;
+    flex: none;
+    white-space: nowrap;
+    border-radius: 999px;
+    padding: 0.4375rem 0.75rem 0.4375rem 0.5rem;
+    border: 1px solid rgba(15, 18, 23, 0.12);
+    background: rgba(255, 255, 255, 0.46);
+    font: var(--typography-label);
+    color: #11141a;
+  }
+
+  .chip-icon {
+    width: 1rem;
+    height: 1rem;
+    display: block;
+    object-fit: contain;
+  }
+
+  .chip-icon-emoji {
+    display: grid;
+    place-items: center;
+    font-size: 0.875rem;
+    line-height: 1;
+  }
+</style>

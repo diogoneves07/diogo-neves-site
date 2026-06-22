@@ -1,50 +1,51 @@
----
-// Returns to the previous page. Hidden when there is no history to go back to.
----
-
-<button
-  id="back-button"
-  type="button"
-  title="Voltar para a página anterior..."
-  aria-label="Voltar para a página anterior"
-  transition:persist>&#129176;</button>
+<button id="back-button" type="button" aria-label="Voltar para a página inicial">
+  Voltar
+</button>
 
 <style>
-  button {
+  #back-button {
     position: fixed;
-    left: 2%;
-    bottom: 3%;
-    padding: 5px;
-    width: 90px;
-    height: 40px;
-    color: #d4d4d4;
-    font-size: 32px;
-    line-height: 35px;
-    border-radius: 10px 0 10px;
-    background-color: var(--brand-blue);
-    border: solid var(--accent);
-    border-width: 0 1px;
+    right: 20px;
+    bottom: 20px;
+    z-index: 80;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 92px;
+    padding: 12px 18px;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-pill);
+    background: var(--accent);
+    color: var(--accent-bright);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
     cursor: pointer;
-    z-index: 1000;
+    backdrop-filter: blur(12px);
+    transition:
+      background-color 0.2s var(--ease),
+      border-color 0.2s var(--ease),
+      transform 0.2s var(--ease);
   }
 
-  button:hover {
-    color: var(--accent);
+  #back-button:hover {
+    background: var(--accent-strong);
+    border-color: var(--accent-strong);
+    transform: translateY(-2px);
+  }
+  @media (max-width: 640px) {
+    #back-button {
+      right: 14px;
+      bottom: 14px;
+    }
   }
 </style>
 
 <script>
-  // The button persists across View Transitions (transition:persist), so the
-  // click listener is attached once; only its visibility is re-evaluated per
-  // navigation as the history length changes.
-  function updateVisibility(): void {
-    const button = document.getElementById("back-button");
-    if (button) button.style.display = window.history.length > 1 ? "" : "none";
-  }
-
-  document
-    .getElementById("back-button")
-    ?.addEventListener("click", () => window.history.back());
-  updateVisibility();
-  document.addEventListener("astro:after-swap", updateVisibility);
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    if (target.id !== "back-button") return;
+    window.location.href = "/";
+  });
 </script>

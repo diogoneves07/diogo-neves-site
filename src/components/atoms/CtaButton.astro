@@ -1,0 +1,59 @@
+---
+// Pill button/link in the warm theme.
+//   "primary"   — filled amber
+//   "secondary" — hairline outline
+interface Props {
+  href: string;
+  variant?: "primary" | "secondary";
+  external?: boolean;
+}
+
+const { href, variant = "primary", external = false } = Astro.props;
+const rel = external ? "noopener noreferrer" : undefined;
+const target = external ? "_blank" : undefined;
+---
+
+<a class:list={["cta", variant]} href={href} rel={rel} target={target}>
+  <slot />
+</a>
+
+<style>
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    padding: 15px 28px;
+    border-radius: var(--radius-pill);
+    border: 1px solid transparent;
+    transition:
+      transform 0.2s var(--ease),
+      background-color 0.2s var(--ease),
+      border-color 0.2s var(--ease),
+      color 0.2s var(--ease);
+  }
+
+  .primary {
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 500;
+  }
+
+  .primary:hover {
+    background: var(--accent-bright);
+    color: var(--bg);
+    transform: translateY(-2px);
+  }
+
+  .secondary {
+    border-color: var(--border-strong);
+    color: var(--fg);
+  }
+
+  .secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent-bright);
+  }
+</style>

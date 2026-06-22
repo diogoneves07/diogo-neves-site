@@ -1,56 +1,54 @@
 ---
 import { ClientRouter } from "astro:transitions";
-import SiteHeader from "../organisms/SiteHeader.astro";
-import SiteFooter from "../organisms/SiteFooter.astro";
 import ProgressBar from "../atoms/ProgressBar.astro";
-import ThemeToggle from "../atoms/ThemeToggle.astro";
 import BackButton from "../atoms/BackButton.astro";
+import SiteFooter from "../organisms/SiteFooter.astro";
 import "../../styles/global.css";
 
 interface Props {
   title: string;
+  description?: string;
+  showBackButton?: boolean;
+  showSiteFooter?: boolean;
 }
 
-const { title } = Astro.props;
+const {
+  title,
+  description = "Diogo Neves — desenvolvedor de software focado em performance, grandes volumes de dados e sistemas escaláveis.",
+  showBackButton = false,
+  showSiteFooter = true,
+} = Astro.props;
 ---
 
 <!doctype html>
-<html lang="pt-br">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
-    {/* Apply theme before first paint to avoid a flash of the wrong theme. */}
-    <script is:inline>
-      (() => {
-        const stored = localStorage.getItem("theme");
-        const prefersDark =
-          !window.matchMedia ||
-          window.matchMedia("(prefers-color-scheme: dark)").matches;
-        const theme = stored || (prefersDark ? "dark" : "light");
-        document.documentElement.setAttribute("data-theme", theme);
-      })();
-    </script>
+    <meta name="description" content={description} />
+    <meta name="author" content="Diogo Neves" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    />
+
     <ClientRouter />
   </head>
   <body>
     <ProgressBar />
-    <SiteHeader />
     <main>
       <slot />
     </main>
-    <SiteFooter />
-    <BackButton />
-    <ThemeToggle />
+    {showSiteFooter && <SiteFooter />}
+    {showBackButton && <BackButton />}
   </body>
 </html>
-
-<script>
-  // Re-apply the stored theme after each View Transition swap, since the
-  // inline head script only runs on the initial document load.
-  document.addEventListener("astro:after-swap", () => {
-    const stored = localStorage.getItem("theme");
-    if (stored) document.documentElement.setAttribute("data-theme", stored);
-  });
-</script>

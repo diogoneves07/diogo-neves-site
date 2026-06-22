@@ -1,29 +1,37 @@
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { describe, expect, it } from "vitest";
-import Bio from "../../src/components/organisms/Bio.astro";
+import { loadRenderers } from "astro:container";
+import { getContainerRenderer as mdxRenderer } from "@astrojs/mdx";
+import { beforeAll, describe, expect, it } from "vitest";
+import PortfolioHome from "../../src/components/organisms/PortfolioHome.astro";
 
-describe("Bio", () => {
-  it("renders the name heading and bio intro", async () => {
-    const container = await AstroContainer.create();
-    const html = await container.renderToString(Bio);
+// PortfolioHome renderiza o conteúdo MDX dos artigos inline (bottom-sheet),
+// então o container precisa do renderer de MDX registrado.
+let container: AstroContainer;
 
-    expect(html).toMatch(/<h1[^>]*>Diogo Neves<\/h1>/);
-    expect(html).toContain("Desenvolvedor Front-End");
+beforeAll(async () => {
+  const renderers = await loadRenderers([mdxRenderer()]);
+  container = await AstroContainer.create({ renderers });
+});
+
+describe("PortfolioHome", () => {
+  it("renders the hero heading and key section ids", async () => {
+    const html = await container.renderToString(PortfolioHome);
+
+    expect(html).toContain("Diogo Neves");
+    expect(html).toContain('id="sobre"');
+    expect(html).toContain('id="artigos"');
+    expect(html).toContain('id="contato"');
   });
 
-  it("links to the external profiles", async () => {
-    const container = await AstroContainer.create();
-    const html = await container.renderToString(Bio);
+  it("renders the hero and contact calls to action", async () => {
+    const html = await container.renderToString(PortfolioHome);
 
+    expect(html).toContain("Software que escala sob pressão");
+    expect(html).toContain(
+      "Tecnologias com as quais me sinto confortável trabalhando:"
+    );
     expect(html).toContain('href="https://www.linkedin.com/in/diogoneves07/"');
-    expect(html).toContain('href="https://github.com/diogoneves07"');
-    expect(html).toContain('href="https://dev.to/diogoneves07"');
-  });
-
-  it("embeds the project poster", async () => {
-    const container = await AstroContainer.create();
-    const html = await container.renderToString(Bio);
-
-    expect(html).toContain('href="/articles/bemtvjs"');
+    expect(html).toContain('href="mailto:07dneves@gmail.com"');
+    expect(html).toContain('href="https://wa.me/5575998431779"');
   });
 });

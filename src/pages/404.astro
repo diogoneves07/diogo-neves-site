@@ -2,32 +2,14 @@
 import BaseLayout from "../components/templates/BaseLayout.astro";
 ---
 
-<BaseLayout title="Diogo Neves | Página não encontrada">
-  <div class="not-found">
-    <h2>Página não encontrada! :(</h2>
-    <a href="/">Início</a>
-  </div>
+<BaseLayout title="Diogo Neves | Página não encontrada" showBackButton={true}>
+  <section class="not-found">
+    <p class="prose-kicker">404</p>
+    <h1>Página não encontrada.</h1>
+    <p>
+      O endereço que você tentou abrir não existe mais ou foi movido durante a
+      reconstrução do portfólio.
+    </p>
+    <a href="/">Voltar ao início</a>
+  </section>
 </BaseLayout>
-
-<style>
-  .not-found {
-    height: 200px;
-    display: grid;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
-
-  .not-found a {
-    display: inline-block;
-    width: 200px;
-    height: 50px;
-    line-height: 50px;
-    font-size: 18px;
-    margin-top: 20px;
-    text-decoration: none;
-    background-color: transparent;
-    border: 1px solid currentColor;
-    border-radius: 10px 0 10px;
-  }
-</style>

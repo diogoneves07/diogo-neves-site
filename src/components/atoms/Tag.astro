@@ -1,0 +1,32 @@
+---
+// Small mono pill used for tech tags. `variant`:
+//   "outline" — hairline border (experience / stack / blog)
+//   "soft"    — amber-tinted fill (project cards)
+interface Props {
+  variant?: "outline" | "soft";
+}
+
+const { variant = "outline" } = Astro.props;
+---
+
+<span class:list={["tag", variant]}><slot /></span>
+
+<style>
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    border-radius: 5px;
+  }
+
+  .outline {
+    color: var(--fg-soft);
+    padding: 5px 11px;
+    border: 1px solid var(--border);
+  }
+
+  .soft {
+    color: var(--accent-bright);
+    padding: 4px 9px;
+    background: var(--accent-soft);
+  }
+</style>
