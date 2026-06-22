@@ -6,9 +6,10 @@ import Lenis from "lenis";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Keyframes de câmera: vista ampla do lago noturno → aproximação do barco.
-const CAM_POS: Vector3[] = [new Vector3(2.6, 1.2, 12), new Vector3(0.2, -0.4, 3.6)];
-const CAM_LOOK: Vector3[] = [new Vector3(0, -2.0, -12), new Vector3(0, -2.8, -9)];
+// Keyframes de câmera: já chegamos perto do barco → close-up final.
+// O barco está em z=-8; partir de z≈6.5 deixa o remador grande logo de cara.
+const CAM_POS: Vector3[] = [new Vector3(1.8, 0.5, 6.5), new Vector3(0.2, -0.4, 3.6)];
+const CAM_LOOK: Vector3[] = [new Vector3(0, -2.2, -8), new Vector3(0, -2.8, -9)];
 
 const sample = (frames: Vector3[], t: number, out: Vector3) =>
   out.copy(frames[0]).lerp(frames[1], t);
@@ -30,6 +31,11 @@ export function createDirector(root: HTMLElement, reduceMotion: boolean): Direct
     applyCamera(camera, progress, time, motion) {
       sample(CAM_POS, progress, tmpPos);
       sample(CAM_LOOK, progress, tmpLook);
+      // Em retrato (smartphone) a cena sobe e fica atrás do texto do hero.
+      // Inclinamos a câmera para cima (alvo mais alto) → o barco desce para perto
+      // do rodapé. Proporcional a quão estreita é a tela; 0 no desktop (sem efeito).
+      const portrait = Math.max(0, 1 - camera.aspect);
+      tmpLook.y += portrait * 4.4;
       const t = time * 0.0002 * motion;
       camera.position.set(
         tmpPos.x + Math.sin(t) * 0.4,

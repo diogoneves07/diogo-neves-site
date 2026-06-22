@@ -41,7 +41,7 @@ export function mountPortfolioScene(root: HTMLElement): Dispose {
   scene.fog = new FogExp2(new Color("#080c16"), 0.01);
 
   const camera = new PerspectiveCamera(42, 1, 0.1, 220);
-  camera.position.set(2.6, 1.2, 12);
+  camera.position.set(1.8, 0.5, 6.5);
 
   // Luzes: ambiente frio + luar direcional vindo da lua.
   const ambient = new AmbientLight(new Color("#1b2740"), 0.8);

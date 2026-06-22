@@ -67,8 +67,8 @@ export function createPerson(): Person {
   const hipR = new Vector3(-0.1, 0.04, 0.0);
   const knL = new Vector3(0.12, 0.08, 0.46);
   const knR = new Vector3(-0.12, 0.08, 0.46);
-  const ftL = new Vector3(0.12, -0.32, 0.5);
-  const ftR = new Vector3(-0.12, -0.32, 0.5);
+  const ftL = new Vector3(0.12, -0.22, 0.5);
+  const ftR = new Vector3(-0.12, -0.22, 0.5);
 
   bone(hip, chest, 0.14, cloth); // tronco
   bone(shL, elL, 0.06, cloth); // braços
