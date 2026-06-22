@@ -191,6 +191,29 @@ select {
   padding-inline: clamp(20px, 5vw, 32px);
 }
 
+/* Shared pill primitive — used by the contact channels and the article
+   reading sheet. Lives here (global) so both the home and the extracted
+   sheet component pick it up. */
+.pill-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3.125rem;
+  padding: 0 1.25rem;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 18, 23, 0.3);
+  background: rgba(248, 244, 235, 0.38);
+  backdrop-filter: blur(18px);
+  font: var(--typography-button);
+}
+
+.pill-button-solid {
+  background: rgba(15, 18, 23, 0.92);
+  border-color: rgba(15, 18, 23, 0.92);
+  color: #f6f1e8;
+}
+
 @keyframes dnFade {
   from {
     opacity: 0;

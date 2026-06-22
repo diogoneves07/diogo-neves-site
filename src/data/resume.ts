@@ -45,20 +45,9 @@ export interface Experience {
   current?: boolean;
 }
 
-export interface Education {
-  course: string;
-  institution: string;
-  period: string;
-}
-
 
 export const profile = {
   name: "Diogo Neves",
-  kicker: "Desenvolvedor de Software · Salvador, BA",
-  // The display headline is split so the accent word can be italicised.
-  headlineLead: "Software que escala",
-  headlineRest: "sob",
-  headlineEmphasis: "pressão",
   description:
     "Desenvolvedor de Software com experiência em backend, frontend e mobile, " +
     "especializado em performance, processamento de grandes volumes de dados e " +
@@ -72,7 +61,6 @@ export const links = {
   linkedin: "https://www.linkedin.com/in/diogoneves07/",
   github: "https://github.com/diogoneves07",
   devto: "https://dev.to/diogoneves07",
-  resume: "/Profile.pdf",
   email: `mailto:${profile.email}`,
 };
 
@@ -213,14 +201,6 @@ export const experiences: Experience[] = [
   },
 ];
 
-export const education: Education[] = [
-  {
-    course: "Técnico em Informática",
-    institution: "IFBA — Instituto Federal da Bahia",
-    period: "2017 — 2019 · Formação",
-  },
-];
-
 export const stackGroups: SkillGroup[] = [
   {
     category: "Linguagens de programação",
@@ -297,12 +277,3 @@ export const stackGroups: SkillGroup[] = [
   },
 ];
 
-export const languages: Language[] = [
-  { name: "Português", level: "Nativo" },
-  { name: "Inglês", level: "Profissional limitado" },
-];
-
-export interface Language {
-  name: string;
-  level: string;
-}
