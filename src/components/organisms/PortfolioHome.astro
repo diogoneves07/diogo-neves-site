@@ -11,8 +11,10 @@ import {
 } from "../../data/resume.ts";
 import PortfolioSceneCanvas from "../molecules/PortfolioSceneCanvas.astro";
 import TechChips from "../molecules/TechChips.astro";
-import { formatArticleDate, toIsoDate } from "../../lib/date.ts";
+import { formatArticleDate } from "../../lib/date.ts";
 import PortfolioBottomNav from "./PortfolioBottomNav.astro";
+import ArticleReadingSheet from "./ArticleReadingSheet.astro";
+import { iconMarkup } from "../../data/icons.ts";
 
 const articles = (await getCollection("articles")).sort(
   (a, b) => a.data.cardOrder - b.data.cardOrder
@@ -26,17 +28,6 @@ const renderedArticles = await Promise.all(
   }))
 );
 
-// Ícones do sheet de leitura, no mesmo traço dos ícones de Contato.
-const sheetIcon = {
-  close: `<path d="m6 6 12 12M18 6 6 18"></path>`,
-  home: `<path d="m4 11 8-7 8 7"></path><path d="M6 10v9h12v-9"></path>`,
-  calendar: `
-    <rect x="4" y="5.5" width="16" height="15" rx="2"></rect>
-    <path d="M4 9.5h16M8 3.5v4M16 3.5v4"></path>
-  `,
-  clock: `<circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5V12l3 2"></path>`,
-};
-
 const navItems = [
   { href: "#sobre", label: "Sobre", icon: "user" as const },
   { href: "#experiencia", label: "Experiência", icon: "briefcase" as const },
@@ -44,28 +35,6 @@ const navItems = [
   { href: "#stack", label: "Tecnologias", icon: "chip" as const },
   { href: "#contato", label: "Contato", icon: "mail" as const },
 ];
-
-// Ícones inline dos canais de contato (mesmo padrão do bottom-nav).
-// Ícones de marca usam preenchimento; os demais, traço.
-const contactIcon: Record<string, string> = {
-  mail: `
-    <path d="M4 7.5h16v9A1.5 1.5 0 0 1 18.5 18h-13A1.5 1.5 0 0 1 4 16.5Z"></path>
-    <path d="m4.5 8 7.5 5 7.5-5"></path>
-  `,
-  code: `
-    <path d="m9 9-3 3 3 3"></path>
-    <path d="m15 9 3 3-3 3"></path>
-  `,
-  whatsapp: `
-    <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 1.67c2.2 0 4.27.86 5.83 2.42a8.2 8.2 0 0 1 2.42 5.82c0 4.54-3.7 8.24-8.25 8.24a8.2 8.2 0 0 1-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24Zm-3.2 4.43c-.15 0-.4.06-.6.29-.21.23-.8.78-.8 1.91 0 1.13.82 2.21.93 2.37.11.15 1.6 2.45 3.95 3.43.55.24.98.38 1.32.49.55.18 1.06.15 1.46.09.44-.07 1.37-.56 1.56-1.1.19-.54.19-1 .14-1.1-.06-.09-.21-.15-.44-.27-.23-.11-1.37-.68-1.58-.76-.21-.07-.37-.11-.52.12-.15.23-.59.76-.73.91-.13.15-.27.17-.5.06-.23-.12-.97-.36-1.85-1.14-.68-.61-1.14-1.36-1.28-1.59-.13-.23-.01-.35.1-.47.1-.1.23-.27.34-.4.11-.14.15-.23.23-.39.08-.15.04-.29-.02-.4-.06-.12-.52-1.27-.72-1.74-.19-.46-.38-.4-.52-.4Z"></path>
-  `,
-  linkedin: `
-    <path d="M6.94 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM3.2 8.5h3.5V21H3.2V8.5Zm5.46 0H12v1.7h.05c.46-.87 1.6-1.8 3.3-1.8 3.53 0 4.18 2.32 4.18 5.34V21h-3.5v-5.5c0-1.3-.02-3-1.82-3-1.83 0-2.11 1.43-2.11 2.9V21h-3.5V8.5Z"></path>
-  `,
-  github: `
-    <path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.36 1.09 2.93.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"></path>
-  `,
-};
 
 const phoneDigits = profile.phone.replace(/\D/g, "");
 const contactLinks = [
@@ -338,7 +307,7 @@ const contactLinks = [
                 viewBox="0 0 24 24"
                 aria-hidden="true"
               >
-                <g set:html={contactIcon[item.icon]} />
+                <g set:html={iconMarkup[item.icon as keyof typeof iconMarkup]} />
               </svg>
               {item.label}
             </a>
@@ -348,65 +317,7 @@ const contactLinks = [
     </aside>
   </section>
 
-  <div class="article-sheet" data-article-sheet hidden data-open="false">
-    <div class="article-sheet__backdrop" data-article-close></div>
-
-    <div
-      class="article-sheet__dialog"
-      data-article-dialog
-      role="dialog"
-      aria-modal="true"
-      aria-label="Leitura de artigo"
-    >
-      <div class="article-sheet__topbar">
-        <span class="article-sheet__handle" aria-hidden="true"></span>
-        <a class="pill-button article-sheet__home" href="#" data-article-close>
-          <svg class="sheet-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <g set:html={sheetIcon.home} />
-          </svg>
-          Início
-        </a>
-        <button
-          type="button"
-          class="article-sheet__close"
-          data-article-close
-          aria-label="Fechar artigo"
-        >
-          <svg class="sheet-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <g set:html={sheetIcon.close} />
-          </svg>
-        </button>
-      </div>
-
-      <div class="article-sheet__scroll" data-article-scroll>
-        {
-          renderedArticles.map(({ article, Content }) => (
-            <article class="prose article-sheet__panel" data-article-panel={article.id} hidden>
-              <header class="prose-header">
-                <p class="prose-kicker">
-                  <svg class="sheet-icon" viewBox="0 0 24 24" aria-hidden="true">
-                    <g set:html={sheetIcon.calendar} />
-                  </svg>
-                  {formatArticleDate(article.data.updated)}
-                </p>
-                <h1>{article.data.title}</h1>
-              </header>
-              <Content />
-              <footer>
-                <svg class="sheet-icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <g set:html={sheetIcon.clock} />
-                </svg>
-                Última atualização{" "}
-                <time datetime={toIsoDate(article.data.updated)}>
-                  {formatArticleDate(article.data.updated)}
-                </time>
-              </footer>
-            </article>
-          ))
-        }
-      </div>
-    </div>
-  </div>
+  <ArticleReadingSheet articles={renderedArticles} />
 </div>
 
 <script>
@@ -626,26 +537,6 @@ const contactLinks = [
     flex-wrap: wrap;
     justify-content: center;
     margin-top: var(--space-5);
-  }
-
-  .pill-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    min-height: 3.125rem;
-    padding: 0 1.25rem;
-    border-radius: 999px;
-    border: 1px solid rgba(15, 18, 23, 0.3);
-    background: rgba(248, 244, 235, 0.38);
-    backdrop-filter: blur(18px);
-    font: var(--typography-button);
-  }
-
-  .pill-button-solid {
-    background: rgba(15, 18, 23, 0.92);
-    border-color: rgba(15, 18, 23, 0.92);
-    color: #f6f1e8;
   }
 
   .chapter-slice {
@@ -1048,121 +939,6 @@ const contactLinks = [
   .contact-icon-brand {
     fill: currentColor;
     stroke: none;
-  }
-
-  /* ---- Bottom-sheet de leitura de artigos ---- */
-  .article-sheet {
-    position: fixed;
-    inset: 0;
-    z-index: 200;
-  }
-
-  .article-sheet[hidden] {
-    display: none;
-  }
-
-  .article-sheet__backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(10, 12, 16, 0.5);
-    opacity: 0;
-    transition: opacity 0.45s var(--ease);
-    cursor: pointer;
-  }
-
-  .article-sheet[data-open="true"] .article-sheet__backdrop {
-    opacity: 1;
-  }
-
-  /* Sobe a partir do rodapé e deixa um vão no topo mostrando a home. */
-  .article-sheet__dialog {
-    position: absolute;
-    inset: clamp(56px, 10vh, 120px) 0 0 0;
-    display: grid;
-    grid-template-rows: auto minmax(0, 1fr);
-    border-radius: 28px 28px 0 0;
-    border: 1px solid rgba(15, 18, 23, 0.1);
-    border-bottom: none;
-    background: rgba(244, 240, 232, 0.96);
-    backdrop-filter: blur(22px);
-    box-shadow: 0 -24px 60px rgba(8, 8, 18, 0.28);
-    transform: translateY(100%);
-    transition: transform 0.45s var(--ease);
-    overflow: hidden;
-  }
-
-  .article-sheet[data-open="true"] .article-sheet__dialog {
-    transform: translateY(0);
-  }
-
-  .article-sheet__topbar {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-3);
-    padding: var(--space-4) clamp(1.25rem, 5vw, 2rem);
-    border-bottom: 1px solid rgba(15, 18, 23, 0.08);
-  }
-
-  .article-sheet__handle {
-    position: absolute;
-    top: 0.6rem;
-    left: 50%;
-    width: 2.75rem;
-    height: 0.3rem;
-    border-radius: 999px;
-    background: rgba(15, 18, 23, 0.18);
-    transform: translateX(-50%);
-  }
-
-  .article-sheet__close {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: 999px;
-    border: 1px solid rgba(15, 18, 23, 0.18);
-    background: rgba(255, 255, 255, 0.6);
-    color: #11141a;
-    cursor: pointer;
-  }
-
-  .article-sheet__close:hover,
-  .article-sheet__home:hover {
-    background: rgba(15, 18, 23, 0.92);
-    border-color: rgba(15, 18, 23, 0.92);
-    color: #f6f1e8;
-    transform: translateY(-1px);
-  }
-
-  .sheet-icon {
-    width: 1.15rem;
-    height: 1.15rem;
-    flex: none;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.7;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .article-sheet__scroll {
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    -webkit-overflow-scrolling: touch;
-    padding: clamp(1.75rem, 5vw, 3rem) 0 clamp(3rem, 8vw, 5rem);
-  }
-
-  .article-sheet__panel[hidden] {
-    display: none;
-  }
-
-  .article-sheet__panel h1 {
-    font-size: clamp(2rem, 4.2vw, 3.1rem);
-    line-height: 1.08;
-    letter-spacing: -0.03em;
   }
 
   @media (max-width: 1100px) {
