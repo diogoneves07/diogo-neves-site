@@ -1,0 +1,33 @@
+<div class="scene-layer" aria-hidden="true">
+  <canvas id="portfolio-scene-canvas" data-portfolio-scene></canvas>
+  <div class="scene-fallback"></div>
+</div>
+
+<style>
+  .scene-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 22% 18%, rgba(220, 232, 255, 0.5), transparent 16%),
+      radial-gradient(circle at 70% 70%, rgba(20, 36, 64, 0.6), transparent 42%),
+      linear-gradient(180deg, #05070f 0%, #0a1326 52%, #060912 100%);
+  }
+
+  #portfolio-scene-canvas,
+  .scene-fallback {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .scene-fallback {
+    background:
+      radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.12), transparent 18%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(16, 18, 24, 0.2));
+    mix-blend-mode: screen;
+    opacity: 0.6;
+  }
+</style>

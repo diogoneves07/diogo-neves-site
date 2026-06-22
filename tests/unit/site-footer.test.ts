@@ -9,6 +9,7 @@ describe("SiteFooter", () => {
 
     expect(html).toContain(String(new Date().getFullYear()));
     expect(html).toContain("Diogo Neves");
-    expect(html).toContain("07dneves(@)gmail.com");
+    expect(html).toContain("07dneves@gmail.com");
+    expect(html).toContain("Salvador, Bahia");
   });
 });

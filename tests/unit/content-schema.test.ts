@@ -4,9 +4,10 @@ import { articleSchema } from "../../src/content/article-schema";
 const valid = {
   title: "BemtvJS",
   pageTitle: "Diogo Neves | BemtvJS",
-  cardTitle: "BemtvJS - lib",
   cardOrder: 1,
-  updated: "2022/12/27",
+  excerpt: "Uma nota curta sobre a biblioteca.",
+  tags: ["TypeScript", "Performance"],
+  updated: "2026-06-21",
 };
 
 describe("articleSchema", () => {

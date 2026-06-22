@@ -1,8 +1,12 @@
 ---
 import BaseLayout from "../components/templates/BaseLayout.astro";
-import Bio from "../components/organisms/Bio.astro";
+import PortfolioHome from "../components/organisms/PortfolioHome.astro";
 ---
 
-<BaseLayout title="Diogo Neves - Site">
-  <Bio />
+<BaseLayout
+  title="Diogo Neves | Portfólio"
+  description="Portfólio imersivo de Diogo Neves com foco em performance, arquitetura e sistemas escaláveis."
+  showSiteFooter={false}
+>
+  <PortfolioHome />
 </BaseLayout>

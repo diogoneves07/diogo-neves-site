@@ -19,22 +19,29 @@ const articles = [
   },
 ];
 
-test.describe("article navigation", () => {
+test.describe("article reading sheet", () => {
   for (const article of articles) {
-    test(`opens ${article.slug} from its card`, async ({ page }) => {
+    test(`opens ${article.slug} as a bottom sheet from its card`, async ({ page }) => {
       await page.goto("/");
-      await page.click(`a[href="/articles/${article.slug}"]`);
+      await page.locator(`#artigos a[href="#leitura-${article.slug}"]`).click();
 
-      await expect(page).toHaveURL(`/articles/${article.slug}`);
+      const sheet = page.locator("[data-article-sheet]");
+      await expect(sheet).toBeVisible();
+      await expect(page).toHaveURL(new RegExp(`#leitura-${article.slug}$`));
       await expect(
-        page.getByRole("heading", { name: article.title, level: 1 })
+        sheet.getByRole("heading", { name: article.title, level: 1 })
       ).toBeVisible();
-      await expect(page.getByText(article.text, { exact: false })).toBeVisible();
+      await expect(sheet.getByText(article.text, { exact: false })).toBeVisible();
     });
   }
 
-  test("sets a descriptive document title per article", async ({ page }) => {
-    await page.goto("/articles/bemtvjs");
-    await expect(page).toHaveTitle(/BemtvJS/);
+  test("deep-links straight into an article via its hash", async ({ page }) => {
+    await page.goto("/#leitura-bemtvjs");
+
+    const sheet = page.locator("[data-article-sheet]");
+    await expect(sheet).toBeVisible();
+    await expect(
+      sheet.getByRole("heading", { name: "BemtvJS", level: 1 })
+    ).toBeVisible();
   });
 });
