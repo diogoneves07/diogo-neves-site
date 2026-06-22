@@ -1,0 +1,616 @@
+/* Portfolio home design system.
+   Extracted from PortfolioHome.astro so the 1k-line organism stays a thin
+   composition of markup + script. Imported only by PortfolioHome, so it is
+   bundled solely on the index page (same scope as the old scoped <style>).
+*/
+
+  .portfolio-home {
+    position: relative;
+    z-index: 1;
+    color: var(--fg);
+  }
+
+  .chapter {
+    position: relative;
+    min-height: 100vh;
+    padding:
+      clamp(4.5rem, 12vw, 7rem)
+      clamp(1.25rem, 4vw, 2.25rem)
+      calc(var(--mobile-bottom-nav-height) + clamp(2.5rem, 8vw, 4rem));
+    display: grid;
+    align-items: center;
+  }
+
+  .chapter-hero {
+    min-height: 112vh;
+    align-items: start;
+    padding-top: 0;
+    padding-bottom: clamp(2.5rem, 8vw, 4rem);
+  }
+
+  .chapter-copy.hero-copy {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: none;
+    width: auto;
+    margin-top: 40px;
+    padding: clamp(1.75rem, 4vw, 2.75rem);
+    padding-top: clamp(0.4375rem, 1vw, 0.6875rem);
+    border-radius: 0;
+    border: 0;
+    background: transparent;
+    backdrop-filter: none;
+  }
+
+  .hero-copy h1,
+  .hero-copy .hero-summary {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-copy h1 {
+    color: #ffffff;
+    white-space: nowrap;
+    font-size: clamp(1.9rem, 5.5vw, 4.4rem);
+    margin-top: 0;
+    line-height: 0.7;
+    text-shadow: 0 3px 18px rgba(0, 0, 0, 0.55);
+  }
+
+  /* Marca de acento antes do nome */
+  .hero-copy h1::before {
+    content: "";
+    display: block;
+    width: clamp(40px, 6vw, 72px);
+    height: 4px;
+    margin-bottom: clamp(0.75rem, 1.6vw, 1.1rem);
+    border-radius: 999px;
+    background: linear-gradient(90deg, #ffffff, rgba(255, 255, 255, 0.1));
+  }
+
+  .hero-copy .hero-summary {
+    color: rgba(255, 255, 255, 0.92);
+    margin-top: var(--space-5);
+    margin-bottom: 30px;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.6);
+  }
+
+  /* Onda decorativa na base do container */
+  .hero-wave {
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    z-index: 0;
+    width: 100%;
+    height: clamp(48px, 7vw, 84px);
+    pointer-events: none;
+  }
+
+  .hero-wave path {
+    fill: transparent;
+    stroke: transparent;
+    stroke-width: 1.5;
+  }
+
+  .chapter-copy,
+  .chapter-surface,
+  .track-panel,
+  .experience-stack,
+  .article-grid,
+  .stack-columns,
+  .contact-panel {
+    opacity: 0;
+    transform: translateY(36px);
+    transition:
+      opacity 0.7s var(--ease),
+      transform 0.8s var(--ease);
+  }
+
+  [data-revealed="true"] {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .chapter-copy {
+    max-width: min(760px, 100%);
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .chapter-kicker,
+  .story-period,
+  .stack-title {
+    font: var(--typography-kicker);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+  }
+
+  h1,
+  h2,
+  h3 {
+    color: #0f1217;
+  }
+
+  h1 {
+    font-size: clamp(3.8rem, 11vw, 8.8rem);
+    line-height: 0.92;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+
+  h2 {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+  }
+
+  h3 {
+    font-size: clamp(1.5rem, 2.2vw, 2rem);
+    line-height: 1.12;
+  }
+
+  .hero-summary,
+  .surface-copy p,
+  .story-card p,
+  .article-card p,
+  .contact-panel p {
+    color: rgba(15, 18, 23, 0.82);
+    font: var(--typography-body);
+  }
+
+  .hero-summary {
+    max-width: 56rem;
+    margin: var(--space-4) auto 0;
+    font: var(--typography-body-large);
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: var(--space-5);
+  }
+
+  .chapter-slice {
+    grid-template-columns: minmax(0, 1.05fr) minmax(280px, 440px);
+    gap: clamp(1.5rem, 5vw, 3.25rem);
+  }
+
+  .chapter-slice-left {
+    grid-template-columns: minmax(280px, 440px) minmax(0, 1.05fr);
+  }
+
+  .chapter-surface {
+    position: relative;
+    padding: clamp(2.375rem, 5vw, 3.5rem);
+    background: rgba(246, 241, 232, 0.82);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(15, 18, 23, 0.08);
+    clip-path: polygon(0 14%, 85% 0, 100% 18%, 100% 100%, 0 100%);
+  }
+
+  .chapter-slice-left .chapter-surface {
+    clip-path: polygon(0 0, 100% 12%, 100% 100%, 16% 100%, 0 78%);
+  }
+
+  /* Mesmo layout da Experiência (painel estreito à esquerda, cards largos
+     à direita). Contorno próprio para não ficar 100% igual. */
+  .chapter-surface-notes {
+    clip-path: polygon(0 8%, 88% 0, 100% 14%, 100% 82%, 84% 100%, 0 100%);
+  }
+
+  .surface-copy {
+    display: grid;
+    gap: var(--space-4);
+    max-width: 38rem;
+  }
+
+  .track-panel,
+  .contact-panel,
+  .stack-card,
+  .story-card,
+  .article-card {
+    border: 1px solid rgba(15, 18, 23, 0.1);
+    background: rgba(248, 244, 235, 0.72);
+    backdrop-filter: blur(18px);
+  }
+
+  /* ---- Seção Sobre: resumo organizado ---- */
+  .surface-copy-about {
+    max-width: 42rem;
+  }
+
+  .about-title {
+    margin-top: clamp(0.75rem, 2vw, 1.5rem);
+    font-size: clamp(1.75rem, 3.4vw, 2.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  .about-lead {
+    font: var(--typography-section-title);
+    font-size: var(--text-xl);
+    color: #11141a;
+  }
+
+  .about-text {
+    font: var(--typography-body);
+    color: rgba(15, 18, 23, 0.82);
+  }
+
+  .about-block {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .about-block-title {
+    font: var(--typography-kicker);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+  }
+
+  .icon-chips,
+  .lang-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: 0;
+    margin: 0;
+  }
+
+  .icon-chips li,
+  .lang-list li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    padding: 0.4375rem 0.8125rem;
+    border: 1px solid rgba(15, 18, 23, 0.12);
+    background: rgba(255, 255, 255, 0.52);
+    font: var(--typography-label);
+    color: #11141a;
+  }
+
+  .domain-icon {
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  /* Dobro do tamanho anterior; altura uniforme mantém os chips nivelados.
+     A largura varia por logo para compensar o desenho dentro do viewBox. */
+  .lang-icon {
+    width: 2.25rem;
+    height: 2.25rem;
+    display: block;
+    object-fit: contain;
+  }
+
+  /* PHP é uma elipse larga e baixa: alarga a caixa e corta o espaço vazio
+     vertical (cover) para o glifo ler no mesmo peso visual dos demais. */
+  .lang-icon-php {
+    width: 3rem;
+    object-fit: cover;
+  }
+
+  /* Dart é levemente mais estreito/diagonal — ganha um respiro extra. */
+  .lang-icon-dart {
+    width: 2.5rem;
+  }
+
+  .lang-list li {
+    border-color: color-mix(in srgb, var(--lang-color, #11141a) 35%, rgba(15, 18, 23, 0.12));
+    background: color-mix(in srgb, var(--lang-color, #11141a) 8%, rgba(255, 255, 255, 0.52));
+  }
+
+  /* ---- Painel lateral: Trajetória ---- */
+  .track-panel {
+    padding: var(--space-5);
+    align-self: center;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .track-countries {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .track-flag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid rgba(15, 18, 23, 0.12);
+    background: rgba(255, 255, 255, 0.52);
+    font: var(--typography-label);
+    color: #11141a;
+  }
+
+  .track-flag span {
+    font-size: 1.05rem;
+    line-height: 1;
+  }
+
+  .track-subtitle {
+    font: var(--typography-kicker);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+    margin: 0;
+  }
+
+  .track-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .track-list li {
+    display: grid;
+    gap: 0.25rem;
+    padding-left: var(--space-4);
+    border-left: 2px solid rgba(15, 18, 23, 0.16);
+  }
+
+  .track-list strong {
+    color: #11141a;
+    font-size: var(--text-base);
+    line-height: 1.2;
+  }
+
+  .track-list span {
+    color: rgba(15, 18, 23, 0.66);
+    font: var(--typography-body-small);
+  }
+
+  .experience-stack,
+  .article-grid,
+  .stack-columns {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .experience-stack,
+  .article-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .story-card,
+  .article-card,
+  .stack-card,
+  .contact-panel {
+    padding: var(--space-5);
+  }
+
+  .story-card {
+    transform: translateY(calc((0.5 - var(--section-progress, 0.5)) * 26px));
+  }
+
+  .story-card,
+  .article-card {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  /* ---- Card de artigo: affordance de clique ---- */
+  .article-card {
+    align-content: start;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      transform 0.25s var(--ease),
+      box-shadow 0.25s var(--ease),
+      border-color 0.25s var(--ease);
+  }
+
+  .article-card:hover,
+  .article-card:focus-visible {
+    transform: translateY(-4px);
+    border-color: rgba(15, 18, 23, 0.28);
+    box-shadow: 0 18px 40px rgba(15, 18, 23, 0.16);
+  }
+
+  .article-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: var(--space-2);
+    font: var(--typography-label);
+    font-weight: 600;
+    color: #0f1217;
+  }
+
+  .article-cta__arrow {
+    transition: transform 0.25s var(--ease);
+  }
+
+  .article-card:hover .article-cta__arrow,
+  .article-card:focus-visible .article-cta__arrow {
+    transform: translateX(4px);
+  }
+
+  .story-company {
+    font-weight: 600;
+  }
+
+  /* ---- Cards de experiência enriquecidos ---- */
+  .story-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .story-icon {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 14px;
+    font-size: 1.5rem;
+    line-height: 1;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(15, 18, 23, 0.12);
+  }
+
+  .story-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .story-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 999px;
+    background: rgba(15, 18, 23, 0.92);
+    color: #f6f1e8;
+    font: var(--typography-caption);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .story-badge::before {
+    content: "";
+    width: 0.4375rem;
+    height: 0.4375rem;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.28);
+  }
+
+  .story-card-current {
+    border-color: rgba(15, 18, 23, 0.28);
+    box-shadow: 0 1px 0 rgba(15, 18, 23, 0.06);
+  }
+
+  .story-highlights {
+    list-style: none;
+    display: grid;
+    gap: var(--space-2);
+    padding: 0;
+    margin: 0;
+  }
+
+  .story-highlights li {
+    position: relative;
+    padding-left: 1.5rem;
+    color: rgba(15, 18, 23, 0.82);
+    font: var(--typography-body-small);
+  }
+
+  .story-highlights li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.5em;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-right: 2px solid rgba(15, 18, 23, 0.55);
+    border-bottom: 2px solid rgba(15, 18, 23, 0.55);
+    transform: rotate(-45deg);
+  }
+
+  .stack-columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-self: center;
+  }
+
+  .stack-card {
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+  }
+
+  /* ---- Contato: lista de canais com ícone ---- */
+  .contact-panel {
+    align-self: center;
+    align-content: start;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2);
+  }
+
+  .contact-pill {
+    width: 250px;
+    flex: none;
+    justify-content: flex-start;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .contact-icon {
+    width: 1.15rem;
+    height: 1.15rem;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .contact-icon-brand {
+    fill: currentColor;
+    stroke: none;
+  }
+
+  @media (max-width: 1100px) {
+    .chapter-slice,
+    .chapter-slice-left {
+      grid-template-columns: 1fr;
+    }
+
+    .experience-stack,
+    .article-grid,
+    .stack-columns {
+      grid-template-columns: 1fr;
+    }
+
+  }
+
+  @media (max-width: 720px) {
+    .chapter {
+      padding-bottom: calc(var(--mobile-bottom-nav-height) + var(--space-5));
+    }
+
+    .chapter-surface,
+    .chapter-slice-left .chapter-surface {
+      clip-path: none;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 19vw, 5.5rem);
+    }
+
+    .hero-copy h1 {
+      white-space: normal;
+    }
+
+    h2 {
+      font-size: clamp(2.1rem, 12vw, 3.25rem);
+    }
+  }
