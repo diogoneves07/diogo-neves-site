@@ -1,5 +1,5 @@
 import { BoxGeometry, Color, DoubleSide, Group, Mesh, MeshStandardMaterial, Vector3 } from "three";
-import { buildHullGeometry } from "./hullGeometry";
+import { buildHullGeometry, buildSoleGeometry } from "./hullGeometry";
 import { createPerson } from "./person";
 import { sampleWaveHeight, WATER_LEVEL } from "./waves";
 
@@ -53,6 +53,13 @@ export function createBoat(): Boat {
   const hullGeo = keep(buildHullGeometry(DIMS));
   const hull = new Mesh(hullGeo, wood);
   tilt.add(hull);
+
+  // Assoalho opaco bem acima da linha de água (que fica em y≈-FREEBOARD local).
+  // Folga generosa porque a onda real é curva (soma de senos) e o barco só
+  // inclina linearmente — com pouca folga a crista "incha" acima do piso e vaza.
+  const soleGeo = keep(buildSoleGeometry(DIMS, -FREEBOARD + 0.2));
+  const sole = new Mesh(soleGeo, wood);
+  tilt.add(sole);
 
   // Banco onde a pessoa senta.
   const seatGeo = keep(new BoxGeometry(DIMS.beam * 0.8, 0.07, 0.5));
