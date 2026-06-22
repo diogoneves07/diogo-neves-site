@@ -1,0 +1,193 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { AstroComponentFactory } from "astro/runtime/server/index.js";
+import { formatArticleDate, toIsoDate } from "../../lib/date.ts";
+import { iconMarkup } from "../../data/icons.ts";
+
+export interface RenderedArticle {
+  article: CollectionEntry<"articles">;
+  Content: AstroComponentFactory;
+}
+
+interface Props {
+  articles: RenderedArticle[];
+}
+
+const { articles } = Astro.props;
+---
+
+<div class="article-sheet" data-article-sheet hidden data-open="false">
+  <div class="article-sheet__backdrop" data-article-close></div>
+
+  <div
+    class="article-sheet__dialog"
+    data-article-dialog
+    role="dialog"
+    aria-modal="true"
+    aria-label="Leitura de artigo"
+  >
+    <div class="article-sheet__topbar">
+      <span class="article-sheet__handle" aria-hidden="true"></span>
+      <a class="pill-button article-sheet__home" href="#" data-article-close>
+        <svg class="sheet-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <g set:html={iconMarkup.home} />
+        </svg>
+        Início
+      </a>
+      <button
+        type="button"
+        class="article-sheet__close"
+        data-article-close
+        aria-label="Fechar artigo"
+      >
+        <svg class="sheet-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <g set:html={iconMarkup.close} />
+        </svg>
+      </button>
+    </div>
+
+    <div class="article-sheet__scroll" data-article-scroll>
+      {
+        articles.map(({ article, Content }) => (
+          <article class="prose article-sheet__panel" data-article-panel={article.id} hidden>
+            <header class="prose-header">
+              <p class="prose-kicker">
+                <svg class="sheet-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <g set:html={iconMarkup.calendar} />
+                </svg>
+                {formatArticleDate(article.data.updated)}
+              </p>
+              <h1>{article.data.title}</h1>
+            </header>
+            <Content />
+            <footer>
+              <svg class="sheet-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <g set:html={iconMarkup.clock} />
+              </svg>
+              Última atualização{" "}
+              <time datetime={toIsoDate(article.data.updated)}>
+                {formatArticleDate(article.data.updated)}
+              </time>
+            </footer>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  .article-sheet {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+  }
+
+  .article-sheet[hidden] {
+    display: none;
+  }
+
+  .article-sheet__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 12, 16, 0.5);
+    opacity: 0;
+    transition: opacity 0.45s var(--ease);
+    cursor: pointer;
+  }
+
+  .article-sheet[data-open="true"] .article-sheet__backdrop {
+    opacity: 1;
+  }
+
+  /* Sobe a partir do rodapé e deixa um vão no topo mostrando a home. */
+  .article-sheet__dialog {
+    position: absolute;
+    inset: clamp(56px, 10vh, 120px) 0 0 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    border-radius: 28px 28px 0 0;
+    border: 1px solid rgba(15, 18, 23, 0.1);
+    border-bottom: none;
+    background: rgba(244, 240, 232, 0.96);
+    backdrop-filter: blur(22px);
+    box-shadow: 0 -24px 60px rgba(8, 8, 18, 0.28);
+    transform: translateY(100%);
+    transition: transform 0.45s var(--ease);
+    overflow: hidden;
+  }
+
+  .article-sheet[data-open="true"] .article-sheet__dialog {
+    transform: translateY(0);
+  }
+
+  .article-sheet__topbar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-4) clamp(1.25rem, 5vw, 2rem);
+    border-bottom: 1px solid rgba(15, 18, 23, 0.08);
+  }
+
+  .article-sheet__handle {
+    position: absolute;
+    top: 0.6rem;
+    left: 50%;
+    width: 2.75rem;
+    height: 0.3rem;
+    border-radius: 999px;
+    background: rgba(15, 18, 23, 0.18);
+    transform: translateX(-50%);
+  }
+
+  .article-sheet__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 999px;
+    border: 1px solid rgba(15, 18, 23, 0.18);
+    background: rgba(255, 255, 255, 0.6);
+    color: #11141a;
+    cursor: pointer;
+  }
+
+  .article-sheet__close:hover,
+  .article-sheet__home:hover {
+    background: rgba(15, 18, 23, 0.92);
+    border-color: rgba(15, 18, 23, 0.92);
+    color: #f6f1e8;
+    transform: translateY(-1px);
+  }
+
+  .sheet-icon {
+    width: 1.15rem;
+    height: 1.15rem;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .article-sheet__scroll {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding: clamp(1.75rem, 5vw, 3rem) 0 clamp(3rem, 8vw, 5rem);
+  }
+
+  .article-sheet__panel[hidden] {
+    display: none;
+  }
+
+  .article-sheet__panel h1 {
+    font-size: clamp(2rem, 4.2vw, 3.1rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+</style>
