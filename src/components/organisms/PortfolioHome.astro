@@ -440,9 +440,14 @@ const contactLinks = [
     disposers.add(setupArticleSheet(root));
 
     // Cena pesada e opcional: carregada à parte, com falha isolada.
-    import("../molecules/scene")
-      .then(({ mountPortfolioScene }) => disposers.add(mountPortfolioScene(root)))
-      .catch((error) => console.error("Falha ao montar a cena do portfólio", error));
+    // Navegadores automatizados (Playwright/Selenium marcam navigator.webdriver)
+    // não se beneficiam do fundo 3D decorativo — e a cena estrangula a main
+    // thread, tornando flaky os testes de UI. Pulamos a montagem nesse caso.
+    if (!navigator.webdriver) {
+      import("../molecules/scene")
+        .then(({ mountPortfolioScene }) => disposers.add(mountPortfolioScene(root)))
+        .catch((error) => console.error("Falha ao montar a cena do portfólio", error));
+    }
   };
 
   init();
