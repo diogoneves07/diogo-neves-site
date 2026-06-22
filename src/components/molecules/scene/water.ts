@@ -31,19 +31,44 @@ uniform vec3 uSky;
 varying vec3 vWorld;
 varying float vHeight;
 
+// Ondulações de ALTA frequência usadas só para perturbar o normal (cintilação),
+// sem mexer na altura física da água — o barco continua seguindo waves.ts.
+vec3 rippleNormal(vec2 p, float t){
+  vec2 d = vec2(0.0);
+  d.x += cos(p.x * 2.3 + t * 1.7) * 0.06;
+  d.y += cos(p.y * 2.9 - t * 1.3) * 0.06;
+  d.x += cos(p.x * 5.1 - p.y * 1.5 + t * 2.1) * 0.03;
+  d.y += cos(p.y * 4.3 + p.x * 1.2 - t * 1.9) * 0.03;
+  return normalize(vec3(-d.x, 1.0, -d.y));
+}
+
 void main(){
-  vec3 n = normalize(vec3(-dFdx(vHeight) * 8.0, 1.0, -dFdy(vHeight) * 8.0));
+  float t = uTime * 0.001;
+
+  // Normal das ondas Gerstner (gradiente da altura) + detalhe fino animado.
+  vec3 nBase = normalize(vec3(-dFdx(vHeight) * 8.0, 1.0, -dFdy(vHeight) * 8.0));
+  vec3 nFine = rippleNormal(vWorld.xz, t);
+  vec3 n = normalize(nBase * 0.7 + nFine * 0.5);
+
   vec3 viewDir = normalize(cameraPosition - vWorld);
-  float fres = pow(1.0 - max(dot(n, viewDir), 0.0), 3.0);
+  float fres = pow(1.0 - max(dot(n, viewDir), 0.0), 4.0);
 
+  // Reflexo do céu por Fresnel: rasante reflete o céu, a pino mostra a água funda.
+  vec3 col = mix(uDeep, uSky, clamp(fres * 1.2 + 0.06, 0.0, 1.0));
+
+  // Caminho de luar: realce especular nítido + brilho largo na direção da lua.
   vec3 moonDir = normalize(vec3(-0.35, 0.55, -0.75));
-  float spec = pow(max(dot(reflect(-moonDir, n), viewDir), 0.0), 40.0);
+  vec3 halfDir = normalize(moonDir + viewDir);
+  float ndh = max(dot(n, halfDir), 0.0);
+  col += pow(ndh, 120.0) * vec3(0.85, 0.9, 1.0) * 1.4;  // glitter
+  col += pow(ndh, 18.0) * vec3(0.18, 0.24, 0.4);        // halo do luar
 
-  vec3 col = mix(uDeep, uSky, clamp(fres + 0.1, 0.0, 1.0));
-  col += spec * vec3(0.7, 0.78, 1.0) * 1.1;       // glitter de luar
-  col += smoothstep(0.25, 0.55, vHeight) * 0.05;  // cristas tênues
+  // Espuma tênue nas cristas, vales mais escuros → sensação de volume d'água.
+  float foam = smoothstep(0.45, 0.7, vHeight);
+  col = mix(col, vec3(0.5, 0.58, 0.7), foam * 0.25);
+  col *= 0.85 + smoothstep(-0.4, 0.5, vHeight) * 0.25;
 
-  gl_FragColor = vec4(col, uOpacity * (0.6 + fres * 0.4));
+  gl_FragColor = vec4(col, uOpacity * (0.7 + fres * 0.3));
 }
 `;
 
@@ -60,8 +85,8 @@ export function createWater(): Water {
       uTime: { value: 0 },
       uWind: { value: WIND },
       uOpacity: { value: 1 },
-      uDeep: { value: [0.01, 0.025, 0.05] },
-      uSky: { value: [0.06, 0.1, 0.18] },
+      uDeep: { value: [0.01, 0.03, 0.055] },
+      uSky: { value: [0.07, 0.12, 0.2] },
     },
     vertexShader: VERTEX,
     fragmentShader: FRAGMENT,
