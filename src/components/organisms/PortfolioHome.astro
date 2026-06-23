@@ -56,6 +56,19 @@ const contactLinks = [
     rightItems={[navItems[2], navItems[3]]}
   />
 
+  <a
+    class="linkedin-float"
+    href={links.linkedin}
+    target="_blank"
+    rel="noreferrer"
+    aria-label="Abrir LinkedIn de Diogo Neves"
+  >
+    <svg class="linkedin-float-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <g set:html={iconMarkup.linkedin} />
+    </svg>
+    <span class="linkedin-float-label">Linkedin</span>
+  </a>
+
   <section
     id="topo"
     class="chapter chapter-hero"
@@ -64,8 +77,10 @@ const contactLinks = [
     data-scene-focus="left"
   >
     <div class="chapter-copy hero-copy" data-reveal>
-      <h1 style="display: inline-block; background: #000;">Diogo Neves</h1>
-      <p class="hero-summary" style="display: inline-block; background: #000;">{profile.description}</p>
+      <div class="hero-intro-card">
+        <h1>Diogo Neves</h1>
+        <p class="hero-summary">{profile.description}</p>
+      </div>
       <svg
         class="hero-wave"
         viewBox="0 0 1200 120"
@@ -366,4 +381,3 @@ const contactLinks = [
   document.addEventListener("astro:page-load", init);
   document.addEventListener("astro:before-swap", cleanup);
 </script>
-

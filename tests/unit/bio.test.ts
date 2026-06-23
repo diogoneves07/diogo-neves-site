@@ -31,7 +31,10 @@ describe("PortfolioHome", () => {
       "Tecnologias com as quais me sinto confortável trabalhando:"
     );
     expect(html).toContain('href="https://www.linkedin.com/in/diogoneves07/"');
+    expect(html).toContain('class="linkedin-float"');
+    expect(html).toContain("Linkedin");
     expect(html).toContain('href="mailto:07dneves@gmail.com"');
     expect(html).toContain('href="https://wa.me/5575998431779"');
+    expect(html).toContain('class="hero-intro-card"');
   });
 });

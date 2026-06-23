@@ -45,6 +45,17 @@
     backdrop-filter: none;
   }
 
+  .hero-intro-card {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: min(64rem, 100%);
+    padding: clamp(1rem, 2.4vw, 1.5rem);
+    border-radius: 1.5rem;
+    background: rgba(0, 0, 0, 0.72);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.2);
+  }
+
   .hero-copy h1,
   .hero-copy .hero-summary {
     position: relative;
@@ -74,7 +85,7 @@
   .hero-copy .hero-summary {
     color: rgba(255, 255, 255, 0.92);
     margin-top: var(--space-5);
-    margin-bottom: 30px;
+    margin-bottom: 0;
     text-shadow: 0 2px 14px rgba(0, 0, 0, 0.6);
   }
 
@@ -93,6 +104,54 @@
     fill: transparent;
     stroke: transparent;
     stroke-width: 1.5;
+  }
+
+  .linkedin-float {
+    position: fixed;
+    right: clamp(0.9rem, 2vw, 1.5rem);
+    top: 50%;
+    z-index: 11;
+    display: inline-flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    align-items: center;
+    justify-content: center;
+    width: 3.9rem;
+    min-height: 4.7rem;
+    padding: 0.55rem 0.35rem 0.45rem;
+    border: 1px solid rgba(15, 18, 23, 0.12);
+    border-radius: 1rem 0 0 1rem;
+    background: rgba(248, 244, 235, 0.92);
+    box-shadow: 0 12px 28px rgba(15, 18, 23, 0.16);
+    transform: translateY(-50%);
+    transition:
+      transform 0.2s var(--ease),
+      box-shadow 0.2s var(--ease),
+      background 0.2s var(--ease);
+    backdrop-filter: blur(12px);
+  }
+
+  .linkedin-float:hover,
+  .linkedin-float:focus-visible {
+    transform: translateY(-50%) translateX(-4px);
+    box-shadow: 0 18px 34px rgba(15, 18, 23, 0.22);
+    background: rgba(255, 255, 255, 0.98);
+  }
+
+  .linkedin-float-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    fill: #0a66c2;
+    flex: none;
+  }
+
+  .linkedin-float-label {
+    color: #0f1217;
+    font: var(--typography-caption);
+    font-weight: 700;
+    font-size: 0.58rem;
+    line-height: 1;
+    letter-spacing: 0.03em;
   }
 
   .chapter-copy,
@@ -615,7 +674,20 @@
       margin-top: 4px;
     }
 
+    .hero-intro-card {
+      width: 100%;
+      border-radius: 1.2rem;
+    }
+
     h2 {
       font-size: clamp(2.1rem, 12vw, 3.25rem);
+    }
+
+    .linkedin-float {
+      right: 0;
+      width: 3.7rem;
+      min-height: 4.45rem;
+      padding: 0.5rem 0.3rem 0.4rem;
+      border-radius: 0.9rem 0 0 0.9rem;
     }
   }

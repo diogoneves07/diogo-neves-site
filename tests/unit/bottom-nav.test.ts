@@ -37,7 +37,9 @@ describe("PortfolioBottomNav", () => {
     const html = await container.renderToString(PortfolioBottomNav, { props });
 
     expect(html).toContain("bottom-nav-center");
+    expect(html).toContain("bottom-nav-center-label");
     // The center icon gets its own brand colour.
     expect(html).toContain("--icon-color:#059669");
+    expect(html).toContain(">Contato</span>");
   });
 });

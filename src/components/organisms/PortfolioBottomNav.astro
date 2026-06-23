@@ -29,7 +29,6 @@ const { leftItems, centerItem, rightItems } = Astro.props;
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <g set:html={iconMarkup[centerItem.icon]} />
       </svg>
-      <span>{centerItem.label}</span>
     </a>
 
     <div class="bottom-nav-bar" aria-hidden="true">
@@ -50,7 +49,15 @@ const { leftItems, centerItem, rightItems } = Astro.props;
         ))}
       </div>
 
-      <div class="bottom-nav-gap" aria-hidden="true"></div>
+      <a
+        href={centerItem.href}
+        class="bottom-nav-center-label"
+        aria-label={centerItem.label}
+        data-nav-link
+        data-bottom-nav-link
+      >
+        <span>{centerItem.label}</span>
+      </a>
 
       <div class="bottom-nav-group">
         {rightItems.map((item) => (
@@ -122,9 +129,20 @@ const { leftItems, centerItem, rightItems } = Astro.props;
     gap: var(--space-1);
   }
 
-  .bottom-nav-gap {
+  .bottom-nav-center-label {
+    display: flex;
     width: 5.875rem;
+    min-height: 3.875rem;
     flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2) var(--space-1);
+    padding-top: 2rem;
+    color: var(--fg-muted);
+    text-align: center;
+    transition:
+      color 0.15s ease-in-out,
+      transform 0.15s ease-in-out;
   }
 
   .bottom-nav-group a,
@@ -150,17 +168,19 @@ const { leftItems, centerItem, rightItems } = Astro.props;
   }
 
   .bottom-nav-group a:hover,
-  .bottom-nav-center:hover {
+  .bottom-nav-center:hover,
+  .bottom-nav-center-label:hover {
     color: var(--fg-bright);
   }
 
   .bottom-nav-group a[data-active="true"],
-  .bottom-nav-center[data-active="true"] {
+  .bottom-nav-center[data-active="true"],
+  .bottom-nav-center-label[data-active="true"] {
     color: var(--accent);
   }
 
   .bottom-nav-group span,
-  .bottom-nav-center span {
+  .bottom-nav-center-label span {
     display: block;
     width: 100%;
     overflow: hidden;
@@ -209,7 +229,8 @@ const { leftItems, centerItem, rightItems } = Astro.props;
   }
 
   .bottom-nav-center:active,
-  .bottom-nav-group a:active {
+  .bottom-nav-group a:active,
+  .bottom-nav-center-label:active {
     transform: translateY(1px);
   }
 
@@ -217,16 +238,12 @@ const { leftItems, centerItem, rightItems } = Astro.props;
     transform: translateX(-50%) translateY(1px);
   }
 
-  .bottom-nav-center span {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+  .bottom-nav-center-label span {
+    font-size: 0.68rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    color: currentColor;
   }
 
   @media (min-width: 721px) {
@@ -239,7 +256,14 @@ const { leftItems, centerItem, rightItems } = Astro.props;
       padding-inline: var(--space-3);
     }
 
-    .bottom-nav-group span {
+    .bottom-nav-center-label {
+      min-height: 4.25rem;
+      padding-inline: var(--space-3);
+      padding-top: 2.15rem;
+    }
+
+    .bottom-nav-group span,
+    .bottom-nav-center-label span {
       font-size: var(--text-sm);
     }
 
