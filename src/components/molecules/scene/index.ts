@@ -1,7 +1,6 @@
 import {
   AmbientLight,
   Color,
-  DirectionalLight,
   FogExp2,
   PerspectiveCamera,
   Scene,
@@ -10,6 +9,7 @@ import {
 import { detectQuality } from "./quality";
 import { createDirector } from "./director";
 import { createStarfield } from "./starfield";
+import { createMoon } from "./moon";
 import { createMeteors } from "./meteors";
 import { createWater } from "./water";
 import { createBoat } from "./boat";
@@ -43,20 +43,20 @@ export function mountPortfolioScene(root: HTMLElement): Dispose {
   const camera = new PerspectiveCamera(42, 1, 0.1, 220);
   camera.position.set(1.8, 0.5, 6.5);
 
-  // Luzes: ambiente frio + luar direcional vindo da lua.
+  // Luz ambiente fria. O luar direcional vive dentro do módulo da Lua (moon.ts),
+  // acompanhando sua posição responsiva.
   const ambient = new AmbientLight(new Color("#1b2740"), 0.8);
-  const moonLight = new DirectionalLight(new Color("#bcd2ff"), 0.7);
-  moonLight.position.set(-18, 22, -52);
-  scene.add(ambient, moonLight);
+  scene.add(ambient);
 
   // Cintilação das estrelas é sutil e ambiente → sempre ligada (1).
   const starfield = createStarfield(profile.starCount, profile.pixelRatio, 1);
+  const moon = createMoon();
   const meteors = createMeteors();
   const water = createWater();
   const boat = createBoat();
   const bubble = createThoughtBubble(boat.headWorld);
 
-  scene.add(starfield.object, water.mesh, boat.object);
+  scene.add(starfield.object, moon.object, water.mesh, boat.object);
   if (meteors) scene.add(meteors.object);
   if (bubble) scene.add(bubble.object);
 
@@ -74,6 +74,7 @@ export function mountPortfolioScene(root: HTMLElement): Dispose {
     const height = window.innerHeight || 1;
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
+    moon.setAspect(camera.aspect); // reposiciona a Lua p/ caber em retrato/paisagem
     post.setSize(width, height);
   };
 
@@ -118,6 +119,7 @@ export function mountPortfolioScene(root: HTMLElement): Dispose {
     director.dispose();
     post.dispose();
     starfield.dispose();
+    moon.dispose();
     meteors?.dispose();
     water.dispose();
     boat.dispose();

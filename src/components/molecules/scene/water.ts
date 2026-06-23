@@ -57,7 +57,7 @@ void main(){
   vec3 col = mix(uDeep, uSky, clamp(fres * 1.2 + 0.06, 0.0, 1.0));
 
   // Caminho de luar: realce especular nítido + brilho largo na direção da lua.
-  vec3 moonDir = normalize(vec3(-0.35, 0.55, -0.75));
+  vec3 moonDir = normalize(vec3(-0.71, 0.18, -0.68)); // aponta para a Lua visível
   vec3 halfDir = normalize(moonDir + viewDir);
   float ndh = max(dot(n, halfDir), 0.0);
   col += pow(ndh, 120.0) * vec3(0.85, 0.9, 1.0) * 1.4;  // glitter
