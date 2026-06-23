@@ -65,9 +65,9 @@ export function mountPortfolioScene(root: HTMLElement): Dispose {
 
   let disposed = false;
   let paused = document.hidden;
-  let frame = 0;
-  let smoothed = 0;
-  let last = performance.now();
+  let frameId = 0;
+  let smoothedProgress = 0;
+  let lastTime = performance.now();
 
   const resize = () => {
     const width = window.innerWidth || 1;
@@ -80,14 +80,15 @@ export function mountPortfolioScene(root: HTMLElement): Dispose {
 
   const render = (time: number) => {
     if (disposed) return;
-    frame = window.requestAnimationFrame(render);
+    frameId = window.requestAnimationFrame(render);
     if (paused) return;
 
-    const delta = (time - last) / 1000;
-    last = time;
+    const deltaSeconds = (time - lastTime) / 1000;
+    lastTime = time;
 
     director.raf(time);
-    smoothed += (director.progress - smoothed) * (profile.reduceMotion ? 1 : 0.1);
+    // Persegue o progresso-alvo do scroll; suavizado (0.1) exceto em reduced-motion.
+    smoothedProgress += (director.progress - smoothedProgress) * (profile.reduceMotion ? 1 : 0.1);
 
     // Ambiente (ondas, barco, meteoros, cintilação) anima sempre — é a essência
     // da cena. reduced-motion só suaviza o balanço OCIOSO da câmera (em director).
@@ -96,24 +97,24 @@ export function mountPortfolioScene(root: HTMLElement): Dispose {
     water.update(time);
     boat.update(time);
     bubble?.update(time);
-    director.applyCamera(camera, smoothed, time, motion);
+    director.applyCamera(camera, smoothedProgress, time, motion);
 
-    post.render(delta);
+    post.render(deltaSeconds);
   };
 
   const onVisibility = () => {
     paused = document.hidden;
-    last = performance.now();
+    lastTime = performance.now();
   };
 
   resize();
-  frame = window.requestAnimationFrame(render);
+  frameId = window.requestAnimationFrame(render);
   window.addEventListener("resize", resize);
   document.addEventListener("visibilitychange", onVisibility);
 
   return () => {
     disposed = true;
-    if (frame) window.cancelAnimationFrame(frame);
+    if (frameId) window.cancelAnimationFrame(frameId);
     window.removeEventListener("resize", resize);
     document.removeEventListener("visibilitychange", onVisibility);
     director.dispose();

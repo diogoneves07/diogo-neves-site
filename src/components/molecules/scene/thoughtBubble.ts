@@ -5,22 +5,22 @@ import { CanvasTexture, Sprite, SpriteMaterial, Vector3 } from "three";
 
 const drawBubble = (): HTMLCanvasElement | null => {
   if (typeof document === "undefined") return null;
-  const W = 512;
-  const H = 340;
+  const width = 512;
+  const height = 340;
   const canvas = document.createElement("canvas");
-  canvas.width = W;
-  canvas.height = H;
+  canvas.width = width;
+  canvas.height = height;
   const ctx = canvas.getContext("2d");
   if (!ctx) return null;
 
   // Corpo do balão (retângulo arredondado) + cauda de bolhas.
-  const bubble = (x: number, y: number, w: number, h: number, r: number) => {
+  const roundedRect = (x: number, y: number, w: number, h: number, radius: number) => {
     ctx.beginPath();
-    ctx.moveTo(x + r, y);
-    ctx.arcTo(x + w, y, x + w, y + h, r);
-    ctx.arcTo(x + w, y + h, x, y + h, r);
-    ctx.arcTo(x, y + h, x, y, r);
-    ctx.arcTo(x, y, x + w, y, r);
+    ctx.moveTo(x + radius, y);
+    ctx.arcTo(x + w, y, x + w, y + h, radius);
+    ctx.arcTo(x + w, y + h, x, y + h, radius);
+    ctx.arcTo(x, y + h, x, y, radius);
+    ctx.arcTo(x, y, x + w, y, radius);
     ctx.closePath();
     ctx.fill();
   };
@@ -43,10 +43,10 @@ const drawBubble = (): HTMLCanvasElement | null => {
   };
 
   ctx.fillStyle = "rgba(10,14,20,0.96)";
-  bubble(40, 24, W - 80, 220, 40);
+  roundedRect(40, 24, width - 80, 220, 40);
   ctx.strokeStyle = "rgba(126,145,168,0.5)";
   ctx.lineWidth = 4;
-  bubble(40, 24, W - 80, 220, 40);
+  roundedRect(40, 24, width - 80, 220, 40);
   ctx.stroke();
 
   // Cauda (bolhas decrescentes em direção à pessoa).
@@ -117,9 +117,9 @@ export function createThoughtBubble(anchor: Vector3): ThoughtBubble | null {
   return {
     object: sprite,
     update(time) {
-      const t = time * 0.001;
-      sprite.position.y = baseY + Math.sin(t * 1.2) * 0.1;
-      const pulse = 1 + Math.sin(t * 1.6) * 0.03;
+      const seconds = time * 0.001;
+      sprite.position.y = baseY + Math.sin(seconds * 1.2) * 0.1;
+      const pulse = 1 + Math.sin(seconds * 1.6) * 0.03;
       sprite.scale.set(baseScaleX * pulse, baseScaleY * pulse, 1);
     },
     dispose() {

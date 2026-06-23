@@ -26,68 +26,66 @@ export type Person = {
 export function createPerson(): Person {
   const group = new Group();
   const disposables: Array<{ dispose: () => void }> = [];
-  const keep = <T extends { dispose: () => void }>(x: T) => {
-    disposables.push(x);
-    return x;
+  const keep = <T extends { dispose: () => void }>(resource: T) => {
+    disposables.push(resource);
+    return resource;
   };
 
   const cloth = keep(new MeshStandardMaterial({ color: new Color("#2b3a57"), roughness: 0.9 }));
   const hood = keep(new MeshStandardMaterial({ color: new Color("#1d2740"), roughness: 0.95 }));
   const skin = keep(new MeshStandardMaterial({ color: new Color("#c79a72"), roughness: 0.7 }));
 
-  const Y = new Vector3(0, 1, 0);
+  const UP = new Vector3(0, 1, 0);
   // Osso = cilindro orientado entre dois pontos, com juntas esféricas nas pontas.
-  const bone = (a: Vector3, b: Vector3, r: number, mat: MeshStandardMaterial) => {
-    const dir = new Vector3().subVectors(b, a);
-    const len = dir.length();
-    const geo = keep(new CylinderGeometry(r, r, len, 10));
-    const mesh = new Mesh(geo, mat);
-    mesh.position.copy(a).add(b).multiplyScalar(0.5);
-    mesh.quaternion.setFromUnitVectors(Y, dir.clone().normalize());
-    group.add(mesh);
-    const jointGeo = keep(new SphereGeometry(r, 10, 8));
-    [a, b].forEach((p) => {
-      const j = new Mesh(jointGeo, mat);
-      j.position.copy(p);
-      group.add(j);
+  const bone = (from: Vector3, to: Vector3, radius: number, material: MeshStandardMaterial) => {
+    const direction = new Vector3().subVectors(to, from);
+    const length = direction.length();
+    const limb = new Mesh(keep(new CylinderGeometry(radius, radius, length, 10)), material);
+    limb.position.copy(from).add(to).multiplyScalar(0.5);
+    limb.quaternion.setFromUnitVectors(UP, direction.clone().normalize());
+    group.add(limb);
+    const jointGeo = keep(new SphereGeometry(radius, 10, 8));
+    [from, to].forEach((point) => {
+      const joint = new Mesh(jointGeo, material);
+      joint.position.copy(point);
+      group.add(joint);
     });
   };
 
   // Pontos do esqueleto (pessoa sentada, leve inclinação para frente).
   const hip = new Vector3(0, 0.04, -0.04);
   const chest = new Vector3(0, 0.46, 0.08);
-  const headC = new Vector3(0, 0.66, 0.12);
-  const shL = new Vector3(0.16, 0.44, 0.06);
-  const shR = new Vector3(-0.16, 0.44, 0.06);
-  const elL = new Vector3(0.21, 0.3, 0.26);
-  const elR = new Vector3(-0.21, 0.3, 0.26);
-  const haL = new Vector3(0.1, 0.22, 0.44);
-  const haR = new Vector3(-0.1, 0.22, 0.44);
+  const headCenter = new Vector3(0, 0.66, 0.12);
+  const shoulderL = new Vector3(0.16, 0.44, 0.06);
+  const shoulderR = new Vector3(-0.16, 0.44, 0.06);
+  const elbowL = new Vector3(0.21, 0.3, 0.26);
+  const elbowR = new Vector3(-0.21, 0.3, 0.26);
+  const handL = new Vector3(0.1, 0.22, 0.44);
+  const handR = new Vector3(-0.1, 0.22, 0.44);
   const hipL = new Vector3(0.1, 0.04, 0.0);
   const hipR = new Vector3(-0.1, 0.04, 0.0);
-  const knL = new Vector3(0.12, 0.08, 0.46);
-  const knR = new Vector3(-0.12, 0.08, 0.46);
-  const ftL = new Vector3(0.12, -0.22, 0.5);
-  const ftR = new Vector3(-0.12, -0.22, 0.5);
+  const kneeL = new Vector3(0.12, 0.08, 0.46);
+  const kneeR = new Vector3(-0.12, 0.08, 0.46);
+  const footL = new Vector3(0.12, -0.22, 0.5);
+  const footR = new Vector3(-0.12, -0.22, 0.5);
 
   bone(hip, chest, 0.14, cloth); // tronco
-  bone(shL, elL, 0.06, cloth); // braços
-  bone(shR, elR, 0.06, cloth);
-  bone(elL, haL, 0.055, cloth); // antebraços
-  bone(elR, haR, 0.055, cloth);
-  bone(hipL, knL, 0.09, cloth); // coxas
-  bone(hipR, knR, 0.09, cloth);
-  bone(knL, ftL, 0.07, cloth); // canelas
-  bone(knR, ftR, 0.07, cloth);
+  bone(shoulderL, elbowL, 0.06, cloth); // braços
+  bone(shoulderR, elbowR, 0.06, cloth);
+  bone(elbowL, handL, 0.055, cloth); // antebraços
+  bone(elbowR, handR, 0.055, cloth);
+  bone(hipL, kneeL, 0.09, cloth); // coxas
+  bone(hipR, kneeR, 0.09, cloth);
+  bone(kneeL, footL, 0.07, cloth); // canelas
+  bone(kneeR, footR, 0.07, cloth);
 
   // Cabeça + gorro (clima noturno).
-  const headGeo = keep(new SphereGeometry(0.13, 18, 14));
-  const head = new Mesh(headGeo, skin);
-  head.position.copy(headC);
+  const head = new Mesh(keep(new SphereGeometry(0.13, 18, 14)), skin);
+  head.position.copy(headCenter);
   group.add(head);
   const beanieGeo = keep(new SphereGeometry(0.145, 18, 12, 0, Math.PI * 2, 0, Math.PI * 0.6));
   const beanie = new Mesh(beanieGeo, hood);
-  beanie.position.copy(headC).y += 0.02;
+  beanie.position.copy(headCenter).y += 0.02;
   group.add(beanie);
 
   // ---- Notebook no colo ----
@@ -98,14 +96,12 @@ export function createPerson(): Person {
   const metal = keep(
     new MeshStandardMaterial({ color: new Color("#161c28"), roughness: 0.5, metalness: 0.4 })
   );
-  const baseGeo = keep(new BoxGeometry(0.32, 0.022, 0.22));
-  const base = new Mesh(baseGeo, metal);
+  const base = new Mesh(keep(new BoxGeometry(0.32, 0.022, 0.22)), metal);
   laptop.add(base);
 
   // Tela voltada para a pessoa (-Z), emitindo luz (capta o bloom).
   const screenMat = keep(new MeshBasicMaterial({ color: new Color("#bfe9ff") }));
-  const screenGeo = keep(new BoxGeometry(0.32, 0.21, 0.016));
-  const screen = new Mesh(screenGeo, screenMat);
+  const screen = new Mesh(keep(new BoxGeometry(0.32, 0.21, 0.016)), screenMat);
   screen.position.set(0, 0.1, -0.1);
   screen.rotation.x = 1.95; // tampa inclinada para a pessoa
   laptop.add(screen);
@@ -116,10 +112,10 @@ export function createPerson(): Person {
 
   return {
     group,
-    headLocal: headC,
+    headLocal: headCenter,
     screenLight,
     dispose() {
-      disposables.forEach((d) => d.dispose());
+      disposables.forEach((resource) => resource.dispose());
     },
   };
 }

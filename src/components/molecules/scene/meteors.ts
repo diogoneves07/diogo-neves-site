@@ -12,44 +12,44 @@ import {
 // (z fixo) voltado para a câmera; o risco é orientado ao longo da velocidade.
 
 const SKY_Z = -48;
-const POOL = 3;
+const STREAK_COUNT = 3; // quantos riscos coexistem (reaproveitados, não recriados)
 
 // Textura do risco: cauda transparente → cabeça brilhante (gradiente horizontal).
 const makeStreakTexture = (): CanvasTexture | null => {
   if (typeof document === "undefined") return null;
-  const W = 256;
-  const H = 32;
+  const width = 256;
+  const height = 32;
   const canvas = document.createElement("canvas");
-  canvas.width = W;
-  canvas.height = H;
+  canvas.width = width;
+  canvas.height = height;
   const ctx = canvas.getContext("2d");
   if (!ctx) return null;
-  const g = ctx.createLinearGradient(0, 0, W, 0);
-  g.addColorStop(0.0, "rgba(255,255,255,0)");
-  g.addColorStop(0.75, "rgba(200,220,255,0.5)");
-  g.addColorStop(1.0, "rgba(255,255,255,1)");
-  ctx.fillStyle = g;
-  ctx.fillRect(0, H * 0.35, W, H * 0.3);
+  const tail = ctx.createLinearGradient(0, 0, width, 0);
+  tail.addColorStop(0.0, "rgba(255,255,255,0)");
+  tail.addColorStop(0.75, "rgba(200,220,255,0.5)");
+  tail.addColorStop(1.0, "rgba(255,255,255,1)");
+  ctx.fillStyle = tail;
+  ctx.fillRect(0, height * 0.35, width, height * 0.3);
   // Glow da cabeça.
-  const head = ctx.createRadialGradient(W - 16, H / 2, 0, W - 16, H / 2, 16);
+  const head = ctx.createRadialGradient(width - 16, height / 2, 0, width - 16, height / 2, 16);
   head.addColorStop(0, "rgba(255,255,255,1)");
   head.addColorStop(1, "rgba(255,255,255,0)");
   ctx.fillStyle = head;
-  ctx.fillRect(W - 40, 0, 40, H);
+  ctx.fillRect(width - 40, 0, 40, height);
   return new CanvasTexture(canvas);
 };
 
 type Streak = {
   mesh: Mesh;
   active: boolean;
-  next: number; // próximo tempo de spawn (ms)
-  start: number; // tempo de início da passagem
-  duration: number;
-  x0: number;
-  y0: number;
-  dx: number;
-  dy: number;
-  len: number;
+  nextSpawnTime: number; // próximo tempo de spawn (ms)
+  startTime: number; // tempo de início da passagem
+  durationMs: number;
+  originX: number;
+  originY: number;
+  velocityX: number;
+  velocityY: number;
+  lengthScale: number;
 };
 
 export type Meteors = {
@@ -63,10 +63,10 @@ export function createMeteors(): Meteors | null {
   if (!texture) return null;
 
   const group = new Group();
-  const geo = new PlaneGeometry(1, 0.18);
+  const geometry = new PlaneGeometry(1, 0.18);
   const streaks: Streak[] = [];
 
-  for (let i = 0; i < POOL; i += 1) {
+  for (let i = 0; i < STREAK_COUNT; i += 1) {
     const material = new MeshBasicMaterial({
       map: texture,
       transparent: true,
@@ -74,71 +74,77 @@ export function createMeteors(): Meteors | null {
       blending: AdditiveBlending,
       opacity: 0,
     });
-    const mesh = new Mesh(geo, material);
+    const mesh = new Mesh(geometry, material);
     mesh.position.z = SKY_Z;
     mesh.visible = false;
     group.add(mesh);
     streaks.push({
       mesh,
       active: false,
-      next: 700 + Math.random() * 2500 + i * 1500,
-      start: 0,
-      duration: 1,
-      x0: 0,
-      y0: 0,
-      dx: 0,
-      dy: 0,
-      len: 10,
+      // Espalha os primeiros disparos no tempo para não saírem todos juntos.
+      nextSpawnTime: 700 + Math.random() * 2500 + i * 1500,
+      startTime: 0,
+      durationMs: 1,
+      originX: 0,
+      originY: 0,
+      velocityX: 0,
+      velocityY: 0,
+      lengthScale: 10,
     });
   }
 
-  const spawn = (s: Streak, time: number) => {
-    s.active = true;
-    s.start = time;
-    s.duration = 800 + Math.random() * 500;
-    s.len = 9 + Math.random() * 7;
-    // Começa no alto da sky visível, viaja na diagonal para baixo (esq. ou dir.).
-    s.x0 = (Math.random() - 0.5) * 60;
-    s.y0 = 6 + Math.random() * 18;
-    const horiz = (Math.random() < 0.5 ? -1 : 1) * (0.5 + Math.random() * 0.7);
-    const travel = 26 + Math.random() * 16;
-    s.dx = horiz;
-    s.dy = -(0.7 + Math.random() * 0.5);
-    const norm = Math.hypot(s.dx, s.dy) || 1;
-    s.dx = (s.dx / norm) * travel;
-    s.dy = (s.dy / norm) * travel;
-    s.mesh.rotation.z = Math.atan2(s.dy, s.dx);
-    s.mesh.scale.set(s.len, 1, 1);
-    s.mesh.visible = true;
+  // Sorteia uma nova passagem: posição de início no alto e direção diagonal
+  // para baixo (esquerda ou direita), normalizada para uma distância de viagem.
+  const spawn = (streak: Streak, time: number) => {
+    streak.active = true;
+    streak.startTime = time;
+    streak.durationMs = 800 + Math.random() * 500;
+    streak.lengthScale = 9 + Math.random() * 7;
+    streak.originX = (Math.random() - 0.5) * 60;
+    streak.originY = 6 + Math.random() * 18;
+    const horizontalSign = (Math.random() < 0.5 ? -1 : 1) * (0.5 + Math.random() * 0.7);
+    const travelDistance = 26 + Math.random() * 16;
+    let dirX = horizontalSign;
+    let dirY = -(0.7 + Math.random() * 0.5);
+    const length = Math.hypot(dirX, dirY) || 1;
+    streak.velocityX = (dirX / length) * travelDistance;
+    streak.velocityY = (dirY / length) * travelDistance;
+    streak.mesh.rotation.z = Math.atan2(streak.velocityY, streak.velocityX);
+    streak.mesh.scale.set(streak.lengthScale, 1, 1);
+    streak.mesh.visible = true;
+  };
+
+  const retire = (streak: Streak, time: number) => {
+    streak.active = false;
+    streak.mesh.visible = false;
+    (streak.mesh.material as MeshBasicMaterial).opacity = 0;
+    streak.nextSpawnTime = time + 2500 + Math.random() * 9000;
   };
 
   return {
     object: group,
     update(time) {
-      for (const s of streaks) {
-        if (!s.active) {
-          if (time >= s.next) spawn(s, time);
+      for (const streak of streaks) {
+        if (!streak.active) {
+          if (time >= streak.nextSpawnTime) spawn(streak, time);
           continue;
         }
-        const p = (time - s.start) / s.duration; // 0..1
-        if (p >= 1) {
-          s.active = false;
-          s.mesh.visible = false;
-          (s.mesh.material as MeshBasicMaterial).opacity = 0;
-          s.next = time + 2500 + Math.random() * 9000;
+        const progress = (time - streak.startTime) / streak.durationMs; // 0..1
+        if (progress >= 1) {
+          retire(streak, time);
           continue;
         }
-        s.mesh.position.x = s.x0 + s.dx * p;
-        s.mesh.position.y = s.y0 + s.dy * p;
+        streak.mesh.position.x = streak.originX + streak.velocityX * progress;
+        streak.mesh.position.y = streak.originY + streak.velocityY * progress;
         // Fade-in rápido, fade-out longo (rastro sumindo).
-        (s.mesh.material as MeshBasicMaterial).opacity =
-          Math.min(p * 6, 1) * (1 - p * p);
+        (streak.mesh.material as MeshBasicMaterial).opacity =
+          Math.min(progress * 6, 1) * (1 - progress * progress);
       }
     },
     dispose() {
-      geo.dispose();
+      geometry.dispose();
       texture.dispose();
-      streaks.forEach((s) => (s.mesh.material as MeshBasicMaterial).dispose());
+      streaks.forEach((streak) => (streak.mesh.material as MeshBasicMaterial).dispose());
     },
   };
 }
