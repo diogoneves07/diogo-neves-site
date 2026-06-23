@@ -1,17 +1,11 @@
 import {
   AdditiveBlending,
   BufferGeometry,
-  CanvasTexture,
   Color,
   Float32BufferAttribute,
   Group,
-  Mesh,
-  MeshBasicMaterial,
   Points,
   ShaderMaterial,
-  SphereGeometry,
-  Sprite,
-  SpriteMaterial,
 } from "three";
 
 // PRNG determinístico (mulberry32) — mesmo céu em todo carregamento.
@@ -59,24 +53,6 @@ void main(){
   gl_FragColor = vec4(vColor, a);
 }
 `;
-
-// Textura de halo (gradiente radial branco→transparente) para a lua.
-const makeHaloTexture = (): CanvasTexture | null => {
-  if (typeof document === "undefined") return null;
-  const size = 256;
-  const canvas = document.createElement("canvas");
-  canvas.width = size;
-  canvas.height = size;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return null;
-  const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
-  g.addColorStop(0.0, "rgba(220,232,255,0.85)");
-  g.addColorStop(0.25, "rgba(190,210,255,0.35)");
-  g.addColorStop(1.0, "rgba(190,210,255,0.0)");
-  ctx.fillStyle = g;
-  ctx.fillRect(0, 0, size, size);
-  return new CanvasTexture(canvas);
-};
 
 export type Starfield = {
   object: Group;
@@ -143,30 +119,6 @@ export function createStarfield(count: number, pixelRatio: number, motion: numbe
   stars.frustumCulled = false;
   group.add(stars);
 
-  // ---- Lua: esfera brilhante (capta o bloom) + halo ----
-  const moonGeo = new SphereGeometry(3, 32, 24);
-  const moonMat = new MeshBasicMaterial({ color: new Color(0.95, 0.96, 1.0) });
-  const moon = new Mesh(moonGeo, moonMat);
-  moon.position.set(-18, 22, -52);
-  group.add(moon);
-
-  const haloTexture = makeHaloTexture();
-  const halo = haloTexture
-    ? new Sprite(
-        new SpriteMaterial({
-          map: haloTexture,
-          transparent: true,
-          depthWrite: false,
-          blending: AdditiveBlending,
-        })
-      )
-    : null;
-  if (halo) {
-    halo.position.copy(moon.position);
-    halo.scale.setScalar(18);
-    group.add(halo);
-  }
-
   return {
     object: group,
     update(time) {
@@ -175,10 +127,6 @@ export function createStarfield(count: number, pixelRatio: number, motion: numbe
     dispose() {
       starGeo.dispose();
       starMat.dispose();
-      moonGeo.dispose();
-      moonMat.dispose();
-      halo?.material.dispose();
-      haloTexture?.dispose();
     },
   };
 }
