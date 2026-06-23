@@ -24,7 +24,7 @@ export function createPost(
   if (!profile.postprocessing) {
     return {
       render: () => renderer.render(scene, camera),
-      setSize: (w, h) => renderer.setSize(w, h, false),
+      setSize: (width, height) => renderer.setSize(width, height, false),
       dispose: () => undefined,
     };
   }
@@ -45,7 +45,7 @@ export function createPost(
 
   return {
     render: (delta) => composer.render(delta),
-    setSize: (w, h) => composer.setSize(w, h),
+    setSize: (width, height) => composer.setSize(width, height),
     dispose: () => composer.dispose(),
   };
 }
