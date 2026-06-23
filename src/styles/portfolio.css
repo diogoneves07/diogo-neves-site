@@ -166,6 +166,7 @@
     max-width: 56rem;
     margin: var(--space-4) auto 0;
     font: var(--typography-body-large);
+    text-align: justify;
   }
 
   .hero-actions {
@@ -608,6 +609,10 @@
 
     .hero-copy h1 {
       white-space: normal;
+    }
+
+    .chapter-copy.hero-copy {
+      margin-top: 4px;
     }
 
     h2 {
