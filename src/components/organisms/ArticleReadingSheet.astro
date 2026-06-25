@@ -46,7 +46,7 @@ const { articles } = Astro.props;
       </button>
     </div>
 
-    <div class="article-sheet__scroll" data-article-scroll>
+    <div class="article-sheet__scroll" data-article-scroll data-lenis-prevent>
       {
         articles.map(({ article, Content }) => (
           <article class="prose article-sheet__panel" data-article-panel={article.id} hidden>

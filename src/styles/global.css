@@ -281,6 +281,7 @@ select {
 }
 
 /* Trava o scroll da home enquanto o sheet de leitura está aberto. */
+html[data-sheet-open="true"],
 html[data-sheet-open="true"] body {
   overflow: hidden;
 }

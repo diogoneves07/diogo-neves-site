@@ -67,6 +67,11 @@ export function createDirector(root: HTMLElement, reduceMotion: boolean): Direct
     lenis.on("scroll", ScrollTrigger.update);
   }
 
+  const onLock = () => lenis?.stop();
+  const onUnlock = () => lenis?.start();
+  window.addEventListener("lenis:lock", onLock);
+  window.addEventListener("lenis:unlock", onUnlock);
+
   const trigger = ScrollTrigger.create({
     trigger: root,
     start: "top top",
@@ -83,6 +88,8 @@ export function createDirector(root: HTMLElement, reduceMotion: boolean): Direct
   state.dispose = () => {
     trigger.kill();
     lenis?.destroy();
+    window.removeEventListener("lenis:lock", onLock);
+    window.removeEventListener("lenis:unlock", onUnlock);
   };
 
   return state;

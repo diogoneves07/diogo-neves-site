@@ -56,6 +56,7 @@ export function setupArticleSheet(root: HTMLElement): Dispose {
     clearHideTimer();
     sheet.hidden = false;
     document.documentElement.dataset.sheetOpen = "true";
+    window.dispatchEvent(new CustomEvent("lenis:lock"));
     // Próximo frame para a transição de entrada disparar a partir do estado fechado.
     requestAnimationFrame(() => {
       sheet.dataset.open = "true";
@@ -66,6 +67,7 @@ export function setupArticleSheet(root: HTMLElement): Dispose {
     if (sheet.hidden) return;
     sheet.dataset.open = "false";
     document.documentElement.dataset.sheetOpen = "false";
+    window.dispatchEvent(new CustomEvent("lenis:unlock"));
     clearHideTimer();
     const closeDelay = window.matchMedia("(prefers-reduced-motion: reduce)").matches
       ? 20
